@@ -2,9 +2,8 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'views/moviecollectionitem',
-    'collections/movie'
-], function($, _, Backbone, MovieCollectionItemView, MovieCollection) {
+    'views/moviecollectionitem'
+], function($, _, Backbone, MovieCollectionItemView) {
         
     // CartCollectionView es un clase, que al inicializarce:
     // 1. Instancia la collection a listarse
@@ -14,12 +13,13 @@ define([
             'button .add': 'addItem',
             'select .filter': 'filterItems'
         },
-        initialize: function(items) {
+        initialize: function(movies) {
             
-            this.collection = new MovieCollection([]);
-            this.collection.fetch();
-                                  
-            this.itemView = new MovieCollectionItemView(this.collection);
+            // @TODO Ver si es necesario
+            this.collection = movies;
+            
+            //
+            this.itemView = new MovieCollectionItemView(movies);
         },
         
         // Avisa a quien este escuchando de se quiere cargar un nuevo item
