@@ -1,11 +1,9 @@
-// NO USAR ESTE, BORRAR!!!
-
 define([
     'jquery',
     'underscore',
     'backbone',
-    'collections/movie.js'
-    'text!templates/movie/moviecollection'    
+    'js/collections/movie.js',
+    'text!/templates/movie/movieCollection.html'
     //'views/moviecollectionitem'
 ], function($, _, Backbone, MovieCollection, MovieCollectionTemplate) {
         
@@ -20,10 +18,10 @@ define([
         initialize: function(movies) {
             
             // @TODO Ver si es necesario
-            //this.collection = movies;
+            this.collection = movies;
 
             // @ Respuesta a comentario anterios, yo (javo) lo vi puesto asi directamente:
-            MovieCollection.fetch();
+            //MovieCollection.fetch();
             
             //
             //this.itemView = new MovieCollectionItemView(movies);
@@ -31,13 +29,11 @@ define([
 
         render: function(){
 
-            data = {movies: MovieCollection.toJSON()}
+            var data = {movies: this.collection.toJSON()};
 
-            var compiledTemplate = _.template( MovieCollectionTemplate, data );
+            var compiledTemplate = _.template(MovieCollectionTemplate, data);
              $('#main').append(compiledTemplate);
-
-
-        }
+        },
         
         // Avisa a quien este escuchando de se quiere cargar un nuevo item
         addItem: function(e) {

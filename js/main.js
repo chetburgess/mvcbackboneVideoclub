@@ -4,8 +4,7 @@ require.config({
         underscore: 'libs/underscore',
         backbone: 'libs/backbone',
         localstorage: 'libs/backbone.localStorage',
-//        handlebars: 'libs/handlebars',
-		text: 'libs/test'
+		text: 'libs/text'
     }
 });
 

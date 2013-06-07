@@ -1,29 +1,31 @@
-<h3>Listado de peliculas</h3>
-<div id="filter"><label>Genero:</label></div>
-<table>
- <tbody>
-  <tr>
-    <th>Titulo</th>
-    <th>Genero</th>
-    <th>A&ntilde;o</th>
-    <th>Poster</th>
-    <th>Rating</th>
-    <th>-</th>
-  </tr>
-  <% _.each(movies, function(movie){ %>
-  <tr>
-    <td><a href="movies/<%= movie.id %>"><%= movie.title %></a></td>
-    <td><%= movie.genre %></td>
-    <td><%= movie.year %></td>
-    <td><img src="<%= movie.poster %>" /></td>
-    <td><%= movie.rating %></td>
-    <td>
-     <button class="edit" value="<%= movie.id %>">Editar</button><br />
-     <button class="remove" value="<%= movie.id %>">Eliminar</button>
-    </td>
-  </tr>
-  <% }); %>
- </tbody>
-</table>
-<br />
-<button class="add">Nueva</button>
+<div class="span12">
+  <h3>Listado de peliculas</h3>
+  <div id="filter"><label>Genero:</label></div>
+  <table>
+   <tbody>
+    <tr>
+      <th>Titulo</th>
+      <th>Genero</th>
+      <th>A&ntilde;o</th>
+      <th>Poster</th>
+      <th>Rating</th>
+      <th>-</th>
+    </tr>
+    <% _.each(movies, function(movie){ %>
+    <tr>
+      <td><a href="movies/<%= movie.id %>"><%= movie.title %></a></td>
+      <td><%= movie.genre %></td>
+      <td><%= movie.year %></td>
+      <td><img src="<%= movie.poster %>" /></td>
+      <td><%= movie.rating %></td>
+      <td>
+       <button class="edit" value="<%= movie.id %>">Editar</button><br />
+       <button class="remove" value="<%= movie.id %>">Eliminar</button>
+      </td>
+    </tr>
+    <% }); %>
+   </tbody>
+  </table>
+  <br />
+  <button class="add">Nueva</button>
+</div>
