@@ -3,7 +3,7 @@ define([
     'underscore',
     'backbone',
     'collections/movie',
-    'views/moviecollectionview'
+    'views/moviecollection'
 ],
 function ($, _, Backbone, MovieCollection, MovieColllectionView) {
     
@@ -118,6 +118,7 @@ function ($, _, Backbone, MovieCollection, MovieColllectionView) {
         // la vista MovieFormView
         // Si no existiera una pelicula asociada al id, salta al listado
         showFormView: function (id) {
+            
             var model, 
                 editing = true, // Estado del formulario
                 nav = 'edit/' + id; // Donde navegar

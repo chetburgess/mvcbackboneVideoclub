@@ -2,7 +2,7 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'views/moviecollectionitem'
+    //'views/moviecollectionitem'
 ], function($, _, Backbone, MovieCollectionItemView) {
         
     // CartCollectionView es un clase, que al inicializarce:
@@ -19,7 +19,7 @@ define([
             this.collection = movies;
             
             //
-            this.itemView = new MovieCollectionItemView(movies);
+            //this.itemView = new MovieCollectionItemView(movies);
         },
         
         // Avisa a quien este escuchando de se quiere cargar un nuevo item

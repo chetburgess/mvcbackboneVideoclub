@@ -34,9 +34,9 @@ define([
                 error.rating = 'La puntuacion de la pelicula debe estar entre 1 y 5';
             }
 
-            if error.length>0
+            if (error.length > 0) {
                 return error;
-            
+            }
         }
 
     });

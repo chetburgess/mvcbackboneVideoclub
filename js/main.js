@@ -10,4 +10,5 @@ require.config({
 
 require(['router'], function(App) {
 
+    App.initialize();
 });
