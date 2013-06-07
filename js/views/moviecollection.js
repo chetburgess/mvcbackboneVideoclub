@@ -9,7 +9,7 @@ define([
     // CartCollectionView es un clase, que al inicializarce:
     // 1. Instancia la collection a listarse
     // 2. Instancia la view para cada model de la collection
-    var CartCollectionView = Backbone.View.extend({
+    var MovieCollectionView = Backbone.View.extend({
         events: {
             'button .add': 'addItem',
             'select .filter': 'filterItems'
@@ -34,5 +34,5 @@ define([
             this.itemView.filterByGenre();
         }
     });
-    return CartCollectionView;
+    return MovieCollectionView;
 });

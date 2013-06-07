@@ -17,12 +17,18 @@ function ($, _, Backbone, MovieColllectionView) {
             'movies/edit/:id': 'showFormView'
         },
         
-        // Oculta (display none), si estuviera setea, la vista actual
+        // Oculta (add className hidden), si estuviera setea, la vista actual
         hideCurrentView: function () {
             
             if (!!this.currentView) {
-                this.currentView.$el.css('display', 'none');
+                this.currentView.$el.addClass('hidden');
             }
+        },
+        
+        // Muestra (remove className hidden), la vista indicada
+        showView: function (view) {
+            
+            view.$el.removeClass('hidden');
         },
         
         // Instancia, si no estuviese previamente creada, y renderiza
@@ -34,10 +40,18 @@ function ($, _, Backbone, MovieColllectionView) {
             
             // Si no esta, instanciamos
             if (!this.moviesCollectionView) {
+                
                 this.moviesCollectionView = new MovieColllectionView();
+                
+                // Agregamos listeners
                 this.moviesCollectionView.on('addMovie', 'addMovie');
+                
+                // Renderizamos
                 this.moviesCollectionView.render();
             }
+            
+            // Mostramos la vista (que pudiera estar oculta)
+            this.showView(this.moviesCollectionView);
             
             // La seteamos como la vista acutal
             this.currentView = this.moviesCollectionView;
@@ -53,8 +67,8 @@ function ($, _, Backbone, MovieColllectionView) {
         
         addMovie: function () {
             
-            this.showDetailView();
-            router.navigate('movies/new');
+            this.showFormView();
+            this.navigate('movies/new');
         }
     });
     
