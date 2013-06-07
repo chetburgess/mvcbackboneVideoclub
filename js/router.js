@@ -52,8 +52,12 @@ function ($, _, Backbone, MovieCollection, MovieColllectionView) {
             // Si no esta instanciada
             if (!this.moviesCollectionView) {
                 
+                console.log(MovieColllectionView);
+
                 // Instanciamos
                 this.moviesCollectionView = new MovieColllectionView(movieCollection);
+
+                console.log('MovieColllectionView');
                 
                 // Agregamos listeners
                 this.moviesCollectionView.on('addMovie', 'addMovie', this);

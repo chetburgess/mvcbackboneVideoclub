@@ -19,6 +19,7 @@ define([
             
             // @TODO Ver si es necesario
             this.collection = movies;
+            console.log(movies);
 
             // @ Respuesta a comentario anterios, yo (javo) lo vi puesto asi directamente:
             //MovieCollection.fetch();
@@ -30,6 +31,8 @@ define([
         render: function(){
 
             var data = {movies: this.collection.toJSON()};
+
+            console.log(MovieCollectionTemplate);
 
             var compiledTemplate = _.template(MovieCollectionTemplate, data);
              $('#main').append(compiledTemplate);
