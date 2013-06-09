@@ -2,15 +2,15 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'collections/movie',
-    'views/moviecollection'
+    'collections/MovieCollection',
+    'views/moviecollection',
+    'views/movieformview'
 ],
-function ($, _, Backbone, MovieCollection, MovieColllectionView) {
+function ($, _, Backbone, MovieCollection, MovieColllectionView, MovieFormView) {
     
-    //
     var movieCollection = new MovieCollection([]);
     movieCollection.fetch();
-    
+    console.log(movieCollection.pluck('title'));
     
     // MovieRouter, es una clase que mapea la URL para convertirlas en acciones
     // y dispara eventos cuando "coincide"
@@ -113,12 +113,13 @@ function ($, _, Backbone, MovieCollection, MovieColllectionView) {
                 this.showCollectionView();
             }
         },
-        
+        movieSaved: function(res, res2){
+//debugger;
+        },
         // Instancia, si no estuviese previamente creada, y renderiza
         // la vista MovieFormView
         // Si no existiera una pelicula asociada al id, salta al listado
         showFormView: function (id) {
-            
             var model, 
                 editing = true, // Estado del formulario
                 nav = 'edit/' + id; // Donde navegar
@@ -149,10 +150,10 @@ function ($, _, Backbone, MovieCollection, MovieColllectionView) {
             // Si no esta, instanciamos
             if (!this.movieFormView) {
                 
-                this.movieFormView = new MovieFormView();
+                this.movieFormView = new MovieFormView({model: model, movieCollection: movieCollection});
                 
                 // Agregamos listeners
-                this.movieFormView.on('saved', 'movieSaved');
+                //this.movieFormView.on('savedMovie', this.movieSaved);
                 
                 // Renderizamos
                 this.movieFormView.render();
@@ -168,7 +169,7 @@ function ($, _, Backbone, MovieCollection, MovieColllectionView) {
             // La seteamos como la vista acutal
             this.currentView = this.movieFormView;
                 
-            //
+            //@TODO is this necessary?
             this.navigate('movies/' + nav);
         },
         

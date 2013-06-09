@@ -2,13 +2,16 @@ define([
     'jquery',
     'underscore',
     'backbone',
+    'handlebars'
     //'views/moviecollectionitem'
-], function($, _, Backbone, MovieCollectionItemView) {
+], function($, _, Backbone, Handlebars, MovieCollectionItemView) {
         
     // CartCollectionView es un clase, que al inicializarce:
     // 1. Instancia la collection a listarse
     // 2. Instancia la view para cada model de la collection
     var MovieCollectionView = Backbone.View.extend({
+        el: '#movie-collection-container',
+        templateSelector: '#movie-list',
         events: {
             'button .add': 'addItem',
             'select .filter': 'filterItems'
@@ -20,6 +23,9 @@ define([
             
             //
             //this.itemView = new MovieCollectionItemView(movies);
+
+            var source   = $(this.templateSelector).html();
+            this.template = Handlebars.compile(source);
         },
         
         // Avisa a quien este escuchando de se quiere cargar un nuevo item
@@ -32,7 +38,11 @@ define([
             
             e.preventDefault();
             this.itemView.filterByGenre();
-        }
+        },
+        render: function(){
+          this.$el.html(this.template({'movies':this.collection.toJSON()}));
+          return this;
+      },
     });
     return MovieCollectionView;
 });

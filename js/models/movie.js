@@ -1,9 +1,11 @@
 define([
   'underscore',
   'backbone',
-], function(_, Backbone) {
+  'localstorage'
+], function(_, Backbone,LocalStorage) {
 
     var Movie = Backbone.Model.extend({
+      localStorage: new LocalStorage('Movies'),
       defaults: {
             title: '',
             year: 0,
@@ -13,12 +15,16 @@ define([
         }, 
 
         initialize: function( options ) {
-            this.query = options.query; 
+            //this.query = options.query; 
+            this.on("invalid",function(model,error){
+                alert(error);
+            });
+
         },
 
         validate: function (attrs) {
             var year = new Date().getFullYear();
-            
+            //@TODO if error is an array, add items using push method
             var error = [];
 
             if (!attrs.title.trim()) {
