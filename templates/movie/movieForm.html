@@ -1,0 +1,36 @@
+
+<h3><%= model? 'Editar' : 'Nueva' %> pelicula</h3>
+<hr />
+<form class="form-horizontal movie-form" action="#new/save">
+	<div class="control-group">
+		<label class="control-label">Titulo <em>(*)</em></label>
+		<div class="controls">
+			<input type="text" name="title" value="<%= model? model.get('title') : '' %>" required title="Ingresa el titulo de la pelicula" />
+		</div>
+	</div>
+	<div class="control-group">
+		<label class="control-label">Genero <em>(*)</em></label>
+		<div class="controls">
+			<input type="text" name="genre" value="<%= model? model.get('genre') : '' %>" required title="Ingresa el genero de la pelicula" />
+		</div>
+	</div>
+	<div class="control-group">
+		<label class="control-label">A&ntilde;o <em>(*)</em></label>
+		<div class="controls">
+			<input type="text" name="year" class="input-small" value="<%= model? model.get('year') : '' %>" required title="Indica el a&ntilde;o de la pelicula" />
+		</div>
+	</div>
+	<div class="control-group">
+		<label class="control-label">Calificaci&oacute;n <em>(*)</em></label>
+		<div class="controls">
+			<input type="text" name="rating" class="input-mini" value="<%= model? model.get('rating') : '' %>" required title="Indica la calificaci&oacute;n de la pelicula" />
+		</div>
+	</div>
+	<% if (model) { %>
+	<input type="hidden" name="id" value="<%= model.id %>" required />
+	<% } %>
+	<div class="form-actions">
+		<button type="submit" class="btn btn-primary save">Guardar</button>
+		<a href="#" class="btn">Cancelar</a>
+	</div>
+</form>

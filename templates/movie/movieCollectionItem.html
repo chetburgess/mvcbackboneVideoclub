@@ -1,0 +1,8 @@
+  <td><%= model.get('title') %></td>
+  <td><%= model.get('genre') %></td>
+  <td><%= model.get('rating') %></td>
+  <td>
+  	<a class="btn btn-small btn-info" title="+Info" href="#movies/detail/<%= model.id %>"><i class="icon-white icon-info-sign"></i></a>
+  	<a class="btn btn-small btn-warning" title="Editar" href="#movies/edit/<%= model.id %>"><i class="icon-white icon-edit"></i></a>
+  	<button class="btn btn-small btn-danger remove" title="Eliminar" value="<%= model.id %>"><i class="icon-white icon-remove"></i></button>
+  </td>

@@ -1,54 +1,109 @@
 define([
-    'jquery',
-    'underscore',
-    'backbone',
-    'js/collections/movie.js',
-    'text!/templates/movie/movieCollection.html'
-    //'views/moviecollectionitem'
-], function($, _, Backbone, MovieCollection, MovieCollectionTemplate) {
-        
-    // CartCollectionView es un clase, que al inicializarce:
-    // 1. Instancia la collection a listarse
-    // 2. Instancia la view para cada model de la collection
-    var MovieCollectionView = Backbone.View.extend({
-        events: {
-            'button .add': 'addItem',
-            'select .filter': 'filterItems'
-        },
-        initialize: function(movies) {
-            
-            // @TODO Ver si es necesario
-            this.collection = movies;
-            console.log(movies);
+  'jquery',
+  'underscore',
+  'backbone',
+  'text!/templates/movie/movieCollection.html',
+  'views/movieCollectionItem'
+], function($, _, Backbone, MovieCollectionHTML, MovieCollectionItemView) {
+  
+  // MovieCollectionView es un clase que representa la vista de
+  // la pelicula completa del listado de peliculas
+  var MovieCollectionView = Backbone.View.extend({
+    // Idicamos que queremos se cree dentro de un div
+    tagName: 'div',
+    className: 'span12 hide',
 
-            // @ Respuesta a comentario anterios, yo (javo) lo vi puesto asi directamente:
-            //MovieCollection.fetch();
-            
-            //
-            //this.itemView = new MovieCollectionItemView(movies);
-        },
+    //
+    events: {
+        'select .filter': 'filterItems'
+    },
 
-        render: function(){
+    //
+    initialize: function () {
 
-            var data = {movies: this.collection.toJSON()};
+      // @NOTE la collection se adjunta automaticamente
+      // Agreganis listeners
+      this.collection.on('add', this.addMovie, this);
+      this.collection.on('remove', this.removeMovie, this);
+      this.collection.on('reset', this.onCollectionReset, this);
+    },
 
-            console.log(MovieCollectionTemplate);
+    //
+    render: function (selector) {
+      var self = this;
 
-            var compiledTemplate = _.template(MovieCollectionTemplate, data);
-             $('#main').append(compiledTemplate);
-        },
-        
-        // Avisa a quien este escuchando de se quiere cargar un nuevo item
-        addItem: function(e) {
-            
-            e.preventDefault();
-            this.trigger('addMovie');
-        },
-        filterItems: function(e) {
-            
-            e.preventDefault();
-            this.itemView.filterByGenre();
+      //
+      this.$el.html(MovieCollectionHTML);
+      this.$el.appendTo(selector);
+
+      this.collection.each(function (model) {
+        self.addMovie(model);
+      });
+    },
+
+    // Hash para referenciar la vista de un modelo puntual
+    itemsViews: {},
+
+    // Agrega una pelicula a la grilla
+    addMovie: function (model) {
+
+      var itemView = new MovieCollectionItemView({model: model});
+      itemView.render('#list-container');
+
+      // Guardamos un la view del modelo
+      this.itemsViews[model.id] = itemView;
+    },
+
+    // Elimina una pelicula de la grilla
+    removeMovie: function (model) {
+
+      // Borramos la referencia a la pelicula
+      delete this.itemsViews[model.id];
+    },
+
+    // Muestra/Oculta la view de una pelicula en la grilla
+    displayItemView: function (itemView, show) {
+
+      itemView.$el[show? 'removeClass' : 'addClass']('hide');
+    },
+
+    // Cuando se reset-ea la collection, recargamos todas las peliculas
+    onCollectionReset: function () {
+      var itemView;
+
+      //
+      // @NOTE Tranquilamente podriamos borrar todas y crear solo las
+      // que estan en la collection, pero para este caso no es necesario
+
+      // Ocultamos todas las views
+      for (itemView in this.itemsViews) {
+        this.displayItemView(itemView, false);
+      }
+
+      // Vemos cuales son las peliculas en la collection
+      _.each(this.collection, function (model) {
+
+        // Si la pelicula no esta cargada
+        if (!this.itemsViews[model.id]) {
+
+          // La agregamos
+          this.addMovie(model);
         }
-    });
-    return MovieCollectionView;
+        else {
+
+          // La mostramos
+          this.displayItemView(itemView, true);
+        }
+      }, this);
+    },
+
+    //
+    filterItems: function(e) {
+      
+      e.preventDefault();
+      this.itemView.filterByGenre();
+    }
+  });
+
+  return MovieCollectionView;
 });
