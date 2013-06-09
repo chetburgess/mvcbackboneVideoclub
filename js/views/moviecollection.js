@@ -3,8 +3,9 @@ define([
   'underscore',
   'backbone',
   'text!/templates/movie/movieCollection.html',
-  'views/movieCollectionItem'
-], function($, _, Backbone, MovieCollectionHTML, MovieCollectionItemView) {
+  'views/movieCollectionItem',
+  'handlebars'
+], function($, _, Backbone, MovieCollectionHTML, MovieCollectionItemView, Handlebars) {
   
   // MovieCollectionView es un clase que representa la vista de
   // la pelicula completa del listado de peliculas
@@ -12,7 +13,12 @@ define([
     // Idicamos que queremos se cree dentro de un div
     tagName: 'div',
     className: 'span12 hide',
-
+    /*el: '#movie-collection-container',
+        templateSelector: '#movie-list',
+        events: {
+            'button .add': 'addItem',
+            'select .filter': 'filterItems'
+        },*/
     //
     events: {
         'select .filter': 'filterItems'
@@ -26,6 +32,8 @@ define([
       this.collection.on('add', this.addMovie, this);
       this.collection.on('remove', this.removeMovie, this);
       this.collection.on('reset', this.onCollectionReset, this);
+      /*var source   = $(this.templateSelector).html();
+            this.template = Handlebars.compile(source);*/
     },
 
     //
@@ -39,6 +47,8 @@ define([
       this.collection.each(function (model) {
         self.addMovie(model);
       });
+      /*this.$el.html(this.template({'movies':this.collection.toJSON()}));
+          return this;*/
     },
 
     // Hash para referenciar la vista de un modelo puntual

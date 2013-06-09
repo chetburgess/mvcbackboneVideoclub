@@ -4,14 +4,16 @@ define([
   'backbone',
   'collections/movie',
   'views/movieCollection',
-  'views/movieForm'
+  'views/movieForm'/*'collections/MovieCollection',
+    'views/moviecollection',
+    'views/movieformview'*/
 ],
 function ($, _, Backbone, MovieCollection, MovieColllectionView, MovieFormView) {
 
   //
   var movieCollection = new MovieCollection([]);
   movieCollection.fetch();
-
+  /*console.log(movieCollection.pluck('title'));*/
 
   // MovieRouter, es una clase que mapea la URL para convertirlas en acciones
   // y dispara eventos cuando "coincide"
@@ -55,6 +57,7 @@ function ($, _, Backbone, MovieCollection, MovieColllectionView, MovieFormView) 
 
         // Instanciamos
         this.views['collection'] = new MovieColllectionView({collection: movieCollection});
+        /*this.moviesCollectionView = new MovieColllectionView(movieCollection);*/
 
         // Renderizamos
         this.views['collection'].render('#main');

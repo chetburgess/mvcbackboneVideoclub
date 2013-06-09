@@ -1,9 +1,11 @@
 define([
   'underscore',
-  'backbone'
-], function(_, Backbone) {
+  'backbone',
+  'localstorage'
+], function(_, Backbone,LocalStorage) {
 
   var Movie = Backbone.Model.extend({
+    //localStorage: new LocalStorage('Movies'),
     defaults: {
       title: '',
       year: 0,
@@ -14,6 +16,9 @@ define([
 
     initialize: function( options ) {
       this.query = options.query; 
+      /*this.on("invalid",function(model,error){
+                alert(error);
+            });*/
     },
 
     validate: function (attrs) {
@@ -42,4 +47,3 @@ define([
 
   return Movie;
 });
-
