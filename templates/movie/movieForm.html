@@ -23,7 +23,7 @@
 	<div class="control-group">
 		<label class="control-label">Calificaci&oacute;n <em>(*)</em></label>
 		<div class="controls">
-	    	<select class="rating" name="rating" title="Indica la calificaci&oacute;n de la pelicula">
+	    	<select class="input-mini rating" name="rating" title="Indica la calificaci&oacute;n de la pelicula">
 <% for (i=1;i<6;i++){ %> 
 				<option <% if (model && i == model.get('rating')){ print('selected'); } %> value="<%= i %>"><%= i %></option>
 <% } %>				

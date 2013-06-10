@@ -16,7 +16,7 @@ define([
 
     //
     events: {
-        'select .filter': 'filterItems'
+        'change .genre': 'filterItems'
     },
 
     //
@@ -24,9 +24,10 @@ define([
 
       // @NOTE la collection se adjunta automaticamente
       // Agregamos listeners
-      this.collection.on('add', this.addMovie, this);
+      //this.collection.on('add', this.addMovie, this);
       this.collection.on('remove', this.removeMovie, this);
-      this.collection.on('reset', this.onCollectionReset, this);
+      this.collection.on('reset', this.showMovies, this);
+      this.collection.on('sync', this.showMovies, this);
     },
 
     //
@@ -36,10 +37,6 @@ define([
       //
       this.$el.html(MovieCollectionHTML);
       this.$el.appendTo(selector);
-
-      this.collection.each(function (model) {
-        self.addMovie(model);
-      });
     },
 
     // Hash para referenciar la vista de un modelo puntual
@@ -69,7 +66,7 @@ define([
     },
 
     // Cuando se reset-ea la collection, recargamos todas las peliculas
-    onCollectionReset: function () {
+    showMovies: function () {
       var itemView;
 
       //
@@ -78,11 +75,11 @@ define([
 
       // Ocultamos todas las views
       for (itemView in this.itemsViews) {
-        this.displayItemView(itemView, false);
+        this.displayItemView(this.itemsViews[itemView], false);
       }
 
       // Vemos cuales son las peliculas en la collection
-      _.each(this.collection, function (model) {
+      _.each(this.collection.models, function (model) {
 
         // Si la pelicula no esta cargada
         if (!this.itemsViews[model.id]) {
@@ -93,16 +90,64 @@ define([
         else {
 
           // La mostramos
-          this.displayItemView(itemView, true);
+          this.displayItemView(this.itemsViews[model.id], true);
         }
       }, this);
+
+      this.setGenreFilter();
+    },
+
+    // Genero seleccionado
+    selectedGenre: 'all',
+
+    // 
+    setGenreFilter: function () {
+      var select = this.$el.find('.genre'),
+        genres = _.uniq(this.collection.pluck('genre'), false, function (genre) {
+          return genre;
+        }),
+        genreSet = this.selectedGenre;
+
+      // Limpiamos
+      select.html('');
+
+      // Agregamos el all
+      $('<option/>', {
+        value: 'all',
+        text: 'Todos'
+      }).appendTo(select);
+
+      //
+      _.each(genres, function (genre) {
+
+        var option = $('<option/>', {
+          value: genre.toLowerCase(),
+          text: genre
+        }).appendTo(select);
+
+        if (genreSet === genre.toLowerCase()) {
+          option[option.length - 1].selected = true;
+        }
+      });
+
+      //
+      return select;
     },
 
     //
-    filterItems: function(e) {
+    filterItems: function() {
       
-      e.preventDefault();
-      this.itemView.filterByGenre();
+      this.selectedGenre = this.$el.find('.genre').val(),
+      
+      _.each(this.collection.models, function (model) {
+        var show = false;
+
+        if (this.selectedGenre === 'all' || model.get('genre').toLowerCase() === this.selectedGenre) { 
+          show = true;
+        }
+
+        this.displayItemView(this.itemsViews[model.id], show);
+      }, this);
     }
   });
 

@@ -1,8 +1,16 @@
 
 <h3>Listado de peliculas</h3>
 <hr />
-<a href="#movies/new" class="btn btn-primary">Nueva</a>
+<a href="#movies/new" class="btn btn-primary">Nueva</a><br /><br />
 <!--<div id="filter"><label>Genero:</label></div>-->
+<div class="input-append">
+  <input type="text" class="input-xlarge search" placeholder="Buscar peliculas por titulo" />
+  <button class="btn" type="button doSearch">Buscar!</button>
+</div>
+<div class="input-prepend">
+	<span class="add-on">Genero</span>
+  <select class="input genre"></select>
+</div>
 <table class="table table-striped">
   <thead>
     <tr>

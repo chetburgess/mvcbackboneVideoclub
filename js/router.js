@@ -11,7 +11,6 @@ function ($, _, Backbone, MovieCollection, MovieColllectionView, MovieFormView, 
 
   //
   var movieCollection = new MovieCollection([]);
-  movieCollection.fetch();
 
   // MovieRouter, es una clase que mapea la URL para convertirlas en acciones
   // y dispara eventos cuando "coincide"
@@ -149,6 +148,9 @@ function ($, _, Backbone, MovieCollection, MovieColllectionView, MovieFormView, 
 
       // Iniciamos
       Backbone.history.start();
+
+      //
+      movieCollection.fetch();
     }
   };
 
