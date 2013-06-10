@@ -19,10 +19,9 @@ define([
 
     // Guardamos el template compilado para reutilizar
     template: _.template(MovieFormHTML),
-    render: function (selector) {
-
+    render: function () {
       this.$el.html(this.template({model: this.model}));
-      this.$el.appendTo(selector);
+      return this;
     },
     
     // Guardamos los cambios en el modelo

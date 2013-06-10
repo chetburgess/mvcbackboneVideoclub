@@ -57,7 +57,7 @@ function ($, _, Backbone, MovieCollection, MovieColllectionView, MovieFormView, 
         this.views['collection'] = new MovieColllectionView({collection: movieCollection});
 
         // Renderizamos
-        this.views['collection'].render('#main');
+        $('#main').append(this.views['collection'].render().el);
       }
 
       // Cambiamos a esta vista
@@ -80,7 +80,7 @@ function ($, _, Backbone, MovieCollection, MovieColllectionView, MovieFormView, 
           this.views['detail'] = new MovieDetailView({model: model});
 
           // Renderizamos
-          this.views['detail'].render('#main');
+          $('#main').append(this.views['detail'].render().el);
         }
 
         // Cambiamos a esta vista
@@ -128,7 +128,7 @@ function ($, _, Backbone, MovieCollection, MovieColllectionView, MovieFormView, 
       });
 
       // Renderizamos
-      this.views['form'].render('#main');
+      $('#main').append(this.views['form'].render().el);
 
       // Cambiamos a esta vista
       this.toggleView('form');
