@@ -37,7 +37,7 @@ define([
         var el = $(this);
         attrs[el.attr('name')] = el.val();
       });
-      attrs.ratting = Number(attrs.ratting);
+      attrs.rating = Number(attrs.rating);
       attrs.year = Number(attrs.year);
 
       // Si es nuevo
@@ -47,10 +47,10 @@ define([
       }
       
       // Guardamos
-      model.set(attrs);
+      //model.set(attrs);
 
       // Validamos
-      if (!model.isValid()) {
+      /*if (!model.isValid()) {
 
         //
         // @TODO mostrar errores
@@ -69,7 +69,32 @@ define([
           this.collection.add([model]);
         }
         model.save();
-      }
+      }*/
+      var me = this;
+      var options = {
+          success: function (model, response, options) {
+              if (add) {
+                me.collection.add([model]);
+              }
+              model.save();
+          },
+          error: function (model, xhr, options){
+              //@TODO this is never called...
+          }
+      };
+      //model.on('error', function(){debugger;});
+      model.on('invalid', function(model,errors, callbacks){
+        _.each(errors, function(error){
+          alert(error.msj);
+        });
+        // Si era nuevo
+        if (add) {
+          // Destruimos
+          model.destroy();
+        }
+          
+      });
+      model.save(attrs, options);
 
       return false;
     }

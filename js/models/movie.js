@@ -35,7 +35,7 @@ define([
       if (!attrs.genre.trim()) {
         error.push({value: 'genre', msj: 'Tenes que ingresar el genero de la pelicua'});
       }
-      if (attrs.rating < 1 || attrs.rating > 5) {
+      if (isNaN(attrs.rating) || attrs.rating < 1 || attrs.rating > 5) {
         error.push({value: 'rating', msj: 'La calificaci&oacute;n de la pelicula debe estar entre 1 y 5'});
       }
 
