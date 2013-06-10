@@ -6,6 +6,7 @@ define([
 
 	var MovieDetailView = Backbone.View.extend({
 		tagName: 'div',
+   		className: 'span12',
 
 		 // Guardamos el template compilado para reutilizar
 	    template: _.template(MovieHTML),
