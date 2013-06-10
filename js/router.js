@@ -4,9 +4,10 @@ define([
   'backbone',
   'collections/movie',
   'views/movieCollection',
-  'views/movieForm'
+  'views/movieForm',
+  'views/movie'
 ],
-function ($, _, Backbone, MovieCollection, MovieColllectionView, MovieFormView) {
+function ($, _, Backbone, MovieCollection, MovieColllectionView, MovieFormView, MovieDetailView) {
 
   //
   var movieCollection = new MovieCollection([]);
