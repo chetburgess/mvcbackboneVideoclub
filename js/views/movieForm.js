@@ -46,38 +46,37 @@ define([
         model = new this.collection.model({});
       }
 
-      //
-      var me = this;
-      var options = {
-          success: function (model, response, options) {
-              if (add) {
-                me.collection.add([model]);
-              }
-              model.save();
-          },
-          error: function (model, xhr, options) {
-              //@TODO this is never called...
-          }
-      };
+      // Si es nuevo
+      if (add) {
+        
+        model = new this.collection.model({});
+      }
+      
+      // Guardamos
+      model.set(attrs);
 
-      //
-      model.on('invalid', function (model, errors, callbacks) {
+      // Validamos
+      if (!model.isValid()) {
 
         //
-        _.each(errors, function (error) {
-          alert(error.msj);
-        });
+        // @TODO mostrar errores
 
         // Si era nuevo
         if (add) {
+
           // Destruimos
           model.destroy();
         }
-      });
+      }
+      else {
 
-      //
-      model.save(attrs, options);
-      
+        if (add) {
+
+          this.collection.add([model]);
+        }
+        model.save();
+      }
+
       return false; // Evitamos que se recarge la pagina
     }
   });
