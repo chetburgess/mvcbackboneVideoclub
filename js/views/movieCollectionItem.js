@@ -10,6 +10,7 @@ define([
   var MovieCollectionItemView = Backbone.View.extend({
     //
     tagName: 'tr',
+    
     //
     events: {
         'click button.remove': 'removeMovie'
@@ -19,7 +20,7 @@ define([
     initialize: function () {
       
       // @NOTE El model se adjunta automaticamente
-      // Agreganis listeners
+      // Agregamos listeners
       this.model.on('change', this.updateMove, this);
     },
 

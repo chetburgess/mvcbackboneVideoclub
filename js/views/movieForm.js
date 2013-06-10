@@ -45,31 +45,8 @@ define([
         
         model = new this.collection.model({});
       }
-      
-      // Guardamos
-      //model.set(attrs);
 
-      // Validamos
-      /*if (!model.isValid()) {
-
-        //
-        // @TODO mostrar errores
-
-        // Si era nuevo
-        if (add) {
-
-          // Destruimos
-          model.destroy();
-        }
-      }
-      else {
-
-        if (add) {
-
-          this.collection.add([model]);
-        }
-        model.save();
-      }*/
+      //
       var me = this;
       var options = {
           success: function (model, response, options) {
@@ -78,25 +55,30 @@ define([
               }
               model.save();
           },
-          error: function (model, xhr, options){
+          error: function (model, xhr, options) {
               //@TODO this is never called...
           }
       };
-      //model.on('error', function(){debugger;});
-      model.on('invalid', function(model,errors, callbacks){
-        _.each(errors, function(error){
+
+      //
+      model.on('invalid', function (model, errors, callbacks) {
+
+        //
+        _.each(errors, function (error) {
           alert(error.msj);
         });
+
         // Si era nuevo
         if (add) {
           // Destruimos
           model.destroy();
         }
-          
       });
-      model.save(attrs, options);
 
-      return false;
+      //
+      model.save(attrs, options);
+      
+      return false; // Evitamos que se recarge la pagina
     }
   });
 

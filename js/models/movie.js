@@ -5,20 +5,12 @@ define([
 ], function(_, Backbone,LocalStorage) {
 
   var Movie = Backbone.Model.extend({
-    //localStorage: new LocalStorage('Movies'),
     defaults: {
       title: '',
       year: 0,
       genre: '',
       poster: '',
       rating: 1
-    }, 
-
-    initialize: function( options ) {
-      this.query = options.query; 
-      /*this.on("invalid",function(model,error){
-                alert(error);
-            });*/
     },
 
     validate: function (attrs) {
