@@ -3,9 +3,8 @@ define([
   'underscore',
   'backbone',
   'text!/templates/movie/movieCollection.html',
-  'views/movieCollectionItem',
-  'handlebars'
-], function($, _, Backbone, MovieCollectionHTML, MovieCollectionItemView, Handlebars) {
+  'views/movieCollectionItem'
+], function($, _, Backbone, MovieCollectionHTML, MovieCollectionItemView) {
   
   // MovieCollectionView es un clase que representa la vista de
   // la pelicula completa del listado de peliculas

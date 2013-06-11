@@ -1,15 +1,15 @@
 define([
   'underscore',
-  'backbone',
-  'localstorage'
-], function(_, Backbone,LocalStorage) {
+  'backbone'
+], function(_, Backbone) {
 
   var Movie = Backbone.Model.extend({
+    idAttribute: '_id',
     defaults: {
+      _rev: '',
       title: '',
       year: 0,
       genre: '',
-      poster: '',
       rating: 1
     },
 

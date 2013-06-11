@@ -150,7 +150,10 @@ function ($, _, Backbone, MovieCollection, MovieColllectionView, MovieFormView, 
       Backbone.history.start();
 
       //
-      movieCollection.fetch();
+      movieCollection.fetch({
+        contentType: 'application/json',
+        dataType: 'jsonp'
+      });
     }
   };
 
