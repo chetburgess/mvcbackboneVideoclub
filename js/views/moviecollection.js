@@ -31,12 +31,11 @@ define([
     },
 
     //
-    render: function (selector) {
-      var self = this;
-
-      //
+    render: function () {
+      
       this.$el.html(MovieCollectionHTML);
-      this.$el.appendTo(selector);
+      this.collection.each($.proxy(this, 'addMovie'));
+      return this;
     },
 
     // Hash para referenciar la vista de un modelo puntual
@@ -46,7 +45,7 @@ define([
     addMovie: function (model) {
 
       var itemView = new MovieCollectionItemView({model: model});
-      itemView.render('#list-container');
+      this.$el.find('#list-container').append(itemView.render().el);
 
       // Guardamos un la view del modelo
       this.itemsViews[model.id] = itemView;
@@ -148,6 +147,8 @@ define([
 
         this.displayItemView(this.itemsViews[model.id], show);
       }, this);
+
+      return false;
     }
   });
 

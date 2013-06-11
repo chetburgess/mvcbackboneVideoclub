@@ -11,10 +11,9 @@ define([
 		 // Guardamos el template compilado para reutilizar
 	    template: _.template(MovieHTML),
 
-	    render: function (selector) {
-
+	    render: function () {
 	      this.$el.html(this.template({model: this.model}));
-	      this.$el.appendTo(selector);
+	      return this;
 	    }
 
 	});	
