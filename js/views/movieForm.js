@@ -45,12 +45,6 @@ define([
         model = new this.collection.model({});
       }
 
-      // Si es nuevo
-      if (add) {
-        
-        model = new this.collection.model({});
-      }
-
       //mode.on('invalid') //@TODO
       
       // Guardamos

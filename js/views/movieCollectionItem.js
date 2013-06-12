@@ -44,7 +44,8 @@ define([
     removeMovie: function() {
       
       if (confirm('Estas seguro que no vas a ver mas la pelicula "' + this.model.get('title') + '"?')) {
-      	this.model.destroy({
+
+        this.model.destroy({
           success: function () {
             this.remove();
           },
