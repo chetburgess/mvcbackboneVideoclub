@@ -16,5 +16,4 @@ require([
 ], function(App, bootstrap, modals) {
 
 	App.initialize();
-	modals.error('Hola mundo!', function () { alert('Chau'); });
 });

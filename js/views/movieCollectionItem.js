@@ -2,8 +2,9 @@ define([
   'jquery',
   'underscore',
   'backbone',
+  'modals',
   'text!/templates/movie/movieCollectionItem.html',
-], function($, _, Backbone, MovieCollectionItemHTML) {
+], function($, _, Backbone, Modals, MovieCollectionItemHTML) {
   
   // MovieCollectionItemView es un clase que representa la vista de
   // la pelicula en la grilla (<tr>...</tr>)
@@ -44,20 +45,30 @@ define([
     removeMovie: function() {
       var self = this;
 
-      
-      if (confirm('Estas seguro que no vas a ver mas la pelicula "' + this.model.get('title') + '"?')) {
+      // Solicitamos confirmacion
+      Modals.confirm({
+        message: 'Estas seguro que no vas a ver mas la pelicula "' + this.model.get('title') + '"?',
+        accept: function () {
 
-      	this.model.destroy({
-          headers: {
-            'IF-Match': this.model.get('_rev')
-          },
-          dataType: 'text/json',
-          success: function () {
-            self.remove();
-          },
-          scope: this
-        });
-      }
+          // Destruimos el modelo
+          self.model.destroy({
+            headers: {
+              'IF-Match': this.model.get('_rev')
+            },
+            dataType: 'text/json',
+            // Si el modelo se elimino con exito
+            success: function () {
+
+              // Eliminamos la vista
+              self.remove();
+            },
+            error: function () {
+
+              // @TODO mostrar error
+            }
+          });
+        }
+      });
     }
   });
 
