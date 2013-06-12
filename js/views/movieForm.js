@@ -21,12 +21,14 @@ define([
     // Guardamos el template compilado para reutilizar
     template: _.template(MovieFormHTML),
     render: function () {
+      
       this.$el.html(this.template({model: this.model}));
       return this;
     },
     
     // Guardamos los cambios en el modelo
     saveMovie: function (evt) {
+      
       var attrs = {}
         , model = this.model 
         , add = !model
@@ -63,9 +65,16 @@ define([
         },
         error: function (mod, xhr, opt) {
 
+          var msg = 'Ha ocurrido un error.<br />Por favor, recarge pa pagina.';
+
+          //@TODO Ver de centralizar este analisis
+          if (xhr.status === 409) {
+            msg = 'La pelicula ya ha sido actualizada por otro usuario.<br />Actualice la p&aacute;gina para ver los nuevos datos.';
+          }
+
           // 
           Modals.error({
-            message: '', //@TODO ver el formato del error devuelto
+            message: msg,
             close: function () {
 
               //@TODO ver si es necesario hacer algo

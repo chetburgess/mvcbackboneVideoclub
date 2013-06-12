@@ -16,7 +16,9 @@ define([
 
     //
     events: {
-        'change .genre': 'filterItems'
+      'change .genre': 'filterItems',
+      'click .doSearch': 'filterItems',
+      'keypress .search': 'matchEnter'
     },
 
     //
@@ -65,6 +67,7 @@ define([
     },
 
     dispalyLoading: function (show) {
+      
       this.$el.find(this.itemListSelector).children().first()[show? 'removeClass':'addClass']('hide');
     },
 
@@ -89,6 +92,7 @@ define([
 
     // 
     setGenreFilter: function () {
+
       var select = this.$el.find('.genre'),
         genres = _.uniq(this.collection.pluck('genre'), false, function (genre) {
           return genre;
@@ -123,10 +127,13 @@ define([
 
     //
     filterItems: function() {
+
       var self = this,
-        id;
+        id,
+        title;
 
       this.selectedGenre = this.$el.find('.genre').val();
+      title = this.$el.find('.search').val();
       
       // Eliminamos todas las vistas de los modelos
       for (id in this.itemsViews) {
@@ -141,10 +148,18 @@ define([
       //
       this.collection.fetch({
         dataType: 'jsonp',
-        data: {genre: this.selectedGenre}
+        data: {genre: this.selectedGenre, title: title}
       });
 
       return false;
+    },
+
+    // Si 
+    matchEnter: function (evt) {
+
+      if (evt.keyCode === 13) {
+        this.filterItems();
+      }
     }
   });
 

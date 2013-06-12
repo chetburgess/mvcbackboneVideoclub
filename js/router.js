@@ -57,10 +57,10 @@ function ($, _, Backbone, MovieCollection, MovieColllectionView, MovieFormView, 
 
         // Renderizamos
         $('#main').append(this.views['collection'].render().el);
-
-        //
-        movieCollection.fetch({dataType: 'jsonp'});
       }
+
+      //
+      movieCollection.fetch({dataType: 'jsonp'});
 
       // Cambiamos a esta vista
       this.toggleView('collection');
@@ -71,28 +71,25 @@ function ($, _, Backbone, MovieCollection, MovieColllectionView, MovieFormView, 
     // Si no existiera una pelicula asociada al id, salta al listado
     showDetailView: function (id) {
 
-      // Controlamos que el modelo este en la collection
-      var model = movieCollection.get(id);
-      if (!!model) {
+      var model = new movieCollection.model({_id: id}),
+        success = $.proxy(function (model) {
 
-        // Si no esta
-        if (!this.views['detail']) {
+          // Si no esta
+          if (!this.views['detail']) {
 
-          // Instanciamos
-          this.views['detail'] = new MovieDetailView({model: model});
+            // Instanciamos
+            this.views['detail'] = new MovieDetailView({model: model});
 
-          // Renderizamos
-          $('#main').append(this.views['detail'].render().el);
-        }
+            // Renderizamos
+            $('#main').append(this.views['detail'].render().el);
+          }
 
-        // Cambiamos a esta vista
-        this.toggleView('detail');
-      }
-      else {
+          // Cambiamos a esta vista
+          this.toggleView('detail');
+      }, this);
 
-        // Si no esta mostramos el listado
-        this.navigate('', {trigger: true});
-      }
+      // Validamos que la pelicula exista
+      this.validateMovie(id, success);
     },
 
     // Instancia, si no estuviese previamente creada, y renderiza
@@ -100,40 +97,57 @@ function ($, _, Backbone, MovieCollection, MovieColllectionView, MovieFormView, 
     // Si no existiera una pelicula asociada al id, salta al listado
     showFormView: function (id) {
 
-      var model = false; // Estado del formulario
+      var success = $.proxy(function (model) {
+
+        // Si esta
+        if (!!this.views['form']) {
+
+          // Destruimos
+          this.views['form'].remove();
+        }
+
+        // Instanciamos
+        this.views['form'] = new MovieFormView({
+          collection: movieCollection
+          , model: model
+        });
+
+        // Renderizamos
+        $('#main').append(this.views['form'].render().el);
+
+        // Cambiamos a esta vista
+        this.toggleView('form');
+      }, this);
 
       // Si pasamos un id
       if (!!id) {
 
-        // Controlamos que el modelo este en la collection
-        model = movieCollection.get(id);
-        if (!model) {
+        // Validamos que la pelicula exista
+        this.validateMovie(id, success);
+      }
+      else {
+        success(false);
+      }
+    },
 
-          // Lo enviamos la vista del listado
+    //
+    validateMovie: function (id, callback) {
+      
+      var model = new movieCollection.model({_id: id}),
+        error = $.proxy(function () {
+
+          // Mostramos el listado
           this.navigate('', {trigger: true});
+        }, this);
 
-          return false; // @TODO ver que esto no afecte de alguna forma
-        }
-      }
+      // Buscamos los datos de la pelicula
+      model.fetch({
+        success: function (model, resp, options) {
 
-      // Si esta
-      if (!!this.views['form']) {
-
-        // Destruimos
-        this.views['form'].remove();
-      }
-
-      // Instanciamos
-      this.views['form'] = new MovieFormView({
-        collection: movieCollection
-        , model: model
+          callback(model);
+        },
+        error: error
       });
-
-      // Renderizamos
-      $('#main').append(this.views['form'].render().el);
-
-      // Cambiamos a esta vista
-      this.toggleView('form');
     }
   });
 

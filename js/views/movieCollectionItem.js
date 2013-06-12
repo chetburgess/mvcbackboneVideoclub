@@ -14,7 +14,7 @@ define([
     
     //
     events: {
-        'click button.remove': 'removeMovie'
+      'click button.remove': 'removeMovie'
     },
 
     //
