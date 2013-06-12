@@ -50,31 +50,21 @@ define([
         
         model = new this.collection.model({});
       }
+
+      //mode.on('invalid') //@TODO
       
       // Guardamos
-      model.set(attrs);
+      model.save(attrs, {
+        success: function () {
 
-      // Validamos
-      if (!model.isValid()) {
-
-        //
-        // @TODO mostrar errores
-
-        // Si era nuevo
-        if (add) {
-
-          // Destruimos
-          model.destroy();
+          if (add) {
+            this.collection.add([model]);
+          }
+        },
+        error: function (resp) {
+          // @TODO
         }
-      }
-      else {
-
-        if (add) {
-
-          this.collection.add([model]);
-        }
-        model.save();
-      }
+      });
 
       return false; // Evitamos que se recarge la pagina
     }

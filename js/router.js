@@ -57,6 +57,9 @@ function ($, _, Backbone, MovieCollection, MovieColllectionView, MovieFormView, 
 
         // Renderizamos
         $('#main').append(this.views['collection'].render().el);
+
+        //
+        movieCollection.fetch({dataType: 'jsonp'});
       }
 
       // Cambiamos a esta vista
@@ -140,20 +143,8 @@ function ($, _, Backbone, MovieCollection, MovieColllectionView, MovieFormView, 
       // Instanciamos
       var movieRouter = new MovieRouter();
 
-      // Agregamos listener (para el alta/modificacion)
-      movieCollection.on('sync', function () {
-
-        this.navigate('', {trigger: true});
-      }, movieRouter);
-
       // Iniciamos
       Backbone.history.start();
-
-      //
-      movieCollection.fetch({
-        contentType: 'application/json',
-        dataType: 'jsonp'
-      });
     }
   };
 

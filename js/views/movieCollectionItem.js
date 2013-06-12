@@ -22,6 +22,7 @@ define([
       // @NOTE El model se adjunta automaticamente
       // Agregamos listeners
       this.model.on('change', this.updateMove, this);
+      this.model.on('remove', this.updateMove, this);
     },
 
     // Guardamos el template compilado para reutilizar
@@ -43,8 +44,12 @@ define([
     removeMovie: function() {
       
       if (confirm('Estas seguro que no vas a ver mas la pelicula "' + this.model.get('title') + '"?')) {
-      	this.model.destroy();
-      	this.remove();
+      	this.model.destroy({
+          success: function () {
+            this.remove();
+          },
+          scope: this
+        });
       }
     }
   });

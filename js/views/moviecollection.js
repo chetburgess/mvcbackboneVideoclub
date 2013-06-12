@@ -12,6 +12,7 @@ define([
     // Idicamos que queremos se cree dentro de un div
     tagName: 'div',
     className: 'span12 hide',
+    itemListSelector: '.list-container',
 
     //
     events: {
@@ -33,7 +34,7 @@ define([
     render: function () {
       
       this.$el.html(MovieCollectionHTML);
-      this.collection.each($.proxy(this, 'addMovie'));
+
       return this;
     },
 
@@ -44,7 +45,7 @@ define([
     addMovie: function (model) {
 
       var itemView = new MovieCollectionItemView({model: model});
-      this.$el.find('#list-container').append(itemView.render().el);
+      this.$el.find(this.itemListSelector).append(itemView.render().el);
 
       // Guardamos un la view del modelo
       this.itemsViews[model.id] = itemView;
@@ -63,40 +64,28 @@ define([
       itemView.$el[show? 'removeClass' : 'addClass']('hide');
     },
 
+    dispalyLoading: function (show) {
+      this.$el.find(this.itemListSelector).children().first()[show? 'removeClass':'addClass']('hide');
+    },
+
     // Cuando se reset-ea la collection, recargamos todas las peliculas
     showMovies: function () {
-      var itemView;
 
-      //
-      // @NOTE Tranquilamente podriamos borrar todas y crear solo las
-      // que estan en la collection, pero para este caso no es necesario
-
-      // Ocultamos todas las views
-      for (itemView in this.itemsViews) {
-        this.displayItemView(this.itemsViews[itemView], false);
-      }
+      this.dispalyLoading(false);
 
       // Vemos cuales son las peliculas en la collection
       _.each(this.collection.models, function (model) {
 
-        // Si la pelicula no esta cargada
-        if (!this.itemsViews[model.id]) {
-
           // La agregamos
           this.addMovie(model);
-        }
-        else {
-
-          // La mostramos
-          this.displayItemView(this.itemsViews[model.id], true);
-        }
       }, this);
 
+      // Creamos las opciones del select
       this.setGenreFilter();
     },
 
     // Genero seleccionado
-    selectedGenre: 'all',
+    selectedGenre: '',
 
     // 
     setGenreFilter: function () {
@@ -111,7 +100,7 @@ define([
 
       // Agregamos el all
       $('<option/>', {
-        value: 'all',
+        value: '',
         text: 'Todos'
       }).appendTo(select);
 
@@ -134,18 +123,26 @@ define([
 
     //
     filterItems: function() {
-      
-      this.selectedGenre = this.$el.find('.genre').val(),
-      
-      _.each(this.collection.models, function (model) {
-        var show = false;
+      var self = this,
+        id;
 
-        if (this.selectedGenre === 'all' || model.get('genre').toLowerCase() === this.selectedGenre) { 
-          show = true;
-        }
+      this.selectedGenre = this.$el.find('.genre').val();
+      
+      // Eliminamos todas las vistas de los modelos
+      for (id in this.itemsViews) {
 
-        this.displayItemView(this.itemsViews[model.id], show);
-      }, this);
+        this.itemsViews[id].remove();
+      }
+      this.itemsViews = {};
+
+      //
+      this.dispalyLoading(false);
+
+      //
+      this.collection.fetch({
+        dataType: 'jsonp',
+        data: {genre: this.selectedGenre}
+      });
 
       return false;
     }

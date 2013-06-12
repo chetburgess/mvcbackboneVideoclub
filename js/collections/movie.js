@@ -8,7 +8,7 @@ define([
   // MovieCollection, es una clase que que agrupa/ordena/pagina/etc modelos del mismo tipo
   var MovieCollection = Backbone.Collection.extend({
     model: MovieModel,
-    url: 'https://socramg.iriscouch.com/movies/_design/movies/_list/movies/Movies',
+    url: 'http://socramg.iriscouch.com/videoclub/_design/app/_list/get/movies',
     parse: function (resp, options) {
     	return resp.rows;
     }

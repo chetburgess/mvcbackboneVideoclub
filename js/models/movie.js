@@ -4,7 +4,10 @@ define([
 ], function(_, Backbone) {
 
   var Movie = Backbone.Model.extend({
+    url: 'http://socramg.iriscouch.com/videoclub/',
+
     idAttribute: '_id',
+    
     defaults: {
       _rev: '',
       title: '',
