@@ -6,9 +6,11 @@ define([
   'collections/movie',
   'views/movieCollection',
   'views/movieForm',
-  'views/movie'
+  'views/movie',
+  'views/paginatorView'
 ],
-function ($, _, Backbone, Modals, MovieCollection, MovieColllectionView, MovieFormView, MovieDetailView) {
+function ($, _, Backbone, Modals, MovieCollection, MovieColllectionView,
+          MovieFormView, MovieDetailView, PaginatorView) {
 
   //
   var movieCollection = new MovieCollection([]);
@@ -49,7 +51,7 @@ function ($, _, Backbone, Modals, MovieCollection, MovieColllectionView, MovieFo
     // Instancia, si no estuviese previamente creada, y renderiza
     // la vista MovieColllectioView
     showCollectionView: function () {
-
+      this.loadPaginator();
       // Si no esta
       if (!this.views['collection']) {
 
@@ -149,6 +151,16 @@ function ($, _, Backbone, Modals, MovieCollection, MovieColllectionView, MovieFo
         },
         error: error
       });
+    },
+    loadPaginator: function(){
+      if (!this.views['paginator']) {
+
+        // Instanciamos
+        this.views['paginator'] = new PaginatorView({collection: movieCollection});
+
+        // Renderizamos
+        $('#main').append(this.views['paginator'].render().el);
+      }
     }
   });
 
