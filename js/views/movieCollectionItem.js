@@ -53,7 +53,7 @@ define([
           // Destruimos el modelo
           self.model.destroy({
             headers: {
-              'IF-Match': this.model.get('_rev')
+              'IF-Match': self.model.get('_rev')
             },
             dataType: 'text/json',
             // Si el modelo se elimino con exito
