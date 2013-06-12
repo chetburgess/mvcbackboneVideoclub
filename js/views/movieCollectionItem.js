@@ -42,12 +42,18 @@ define([
 
     // Eliminar la pelicula
     removeMovie: function() {
+      var self = this;
+
       
       if (confirm('Estas seguro que no vas a ver mas la pelicula "' + this.model.get('title') + '"?')) {
 
-        this.model.destroy({
+      	this.model.destroy({
+          headers: {
+            'IF-Match': this.model.get('_rev')
+          },
+          dataType: 'text/json',
           success: function () {
-            this.remove();
+            self.remove();
           },
           scope: this
         });

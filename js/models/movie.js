@@ -9,7 +9,6 @@ define([
     idAttribute: '_id',
     
     defaults: {
-      _rev: '',
       title: '',
       year: 0,
       genre: '',

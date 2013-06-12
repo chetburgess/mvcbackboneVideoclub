@@ -17,5 +17,48 @@
   <div class="container">
     <div id="main" class="row"></div>
   </div>
+
+	<!-- Error Modal -->
+	<div id="errorModal" class="modal hide fade alert-error" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
+		<div class="modal-header">
+		  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		  <h3 id="errorModalLabel">Error!</h3>
+		</div>
+		<div class="modal-body">
+		  <p class="errorModalMessage"></p>
+		</div>
+		<div class="modal-footer">
+		  <button class="btn" data-dismiss="modal" aria-hidden="true">Aceptar</button>
+		</div>
+	</div>
+
+	<!-- Success Modal -->
+	<div id="successModal" class="modal hide fade alert-success" tabindex="-1" role="dialog" aria-labelledby="successModalLabel" aria-hidden="true">
+		<div class="modal-header">
+		  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		  <h3 id="errorModalLabel">Exito!</h3>
+		</div>
+		<div class="modal-body">
+		  <p class="successModalMessage"></p>
+		</div>
+		<div class="modal-footer">
+		  <button class="btn" data-dismiss="modal" aria-hidden="true">Aceptar</button>
+		</div>
+	</div>
+
+	<!-- Confirm Modal -->
+	<div id="confirmModal" class="modal hide fade alert-block" tabindex="-1" role="dialog" aria-labelledby="confirmModalLabel" aria-hidden="true">
+		<div class="modal-header">
+		  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		  <h3 id="confirmModalLabel">Error!</h3>
+		</div>
+		<div class="modal-body">
+		  <p class="confirmModalMessage"></p>
+		</div>
+		<div class="modal-footer">
+		  <button class="btn" data-dismiss="modal" aria-hidden="true">Cancelar</button>
+		  <button class="btn btn-primary">Aceptar</button>
+		</div>
+	</div>
 </body>
 </html>
