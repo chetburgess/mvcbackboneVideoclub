@@ -26,6 +26,7 @@ define([
     
     // Guardamos los cambios en el modelo
     saveMovie: function (evt) {
+      evt.preventDefault();
       var attrs = {}
         , model = this.model 
         , add = !model; // Si no se paso un modelo
@@ -39,34 +40,26 @@ define([
       attrs.rating = Number(attrs.rating);
       attrs.year = Number(attrs.year);
 
-      // Si es nuevo
-      if (add) {
-        
-        model = new this.collection.model({});
-      }
+      var callbacks = {
+        error: this.errorCallback
+      };
 
       // Si es nuevo
-      if (add) {
-        
+      if (add) {        
         model = new this.collection.model({});
+        callbacks['success'] = $.proxy(this ,'successCallback');
       }
 
-      //mode.on('invalid') //@TODO
-      
       // Guardamos
-      model.save(attrs, {
-        success: function () {
-
-          if (add) {
-            this.collection.add([model]);
-          }
-        },
-        error: function (resp) {
-          // @TODO
-        }
-      });
+      model.save(attrs, callbacks);
 
       return false; // Evitamos que se recarge la pagina
+    },
+    successCallback: function(mod, res, opt){
+      this.collection.add([mod]);
+    },
+    errorCallback: function(mod, xhr, opt){
+      //@TODO "Error while trying to save on Server"
     }
   });
 
