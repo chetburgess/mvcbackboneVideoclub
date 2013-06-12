@@ -91,5 +91,32 @@
 		});
 	};
 
+	// Despiega una ventana estilo cargando
+	// @params: config: message (string), show (bool)
+	// @returns: void
+	//
+	var divLoading = false;
+	Modals.loading = function (config) {
+		
+		if(!config.message) {
+			config.message = 'Obteniendo datos, por favor espere...';
+		}
+
+		if (!divLoading) {
+
+			divLoading = $('<div/>').html('<div class="modal hide" role="dialog" aria-hidden="true">'+
+				'<div class="modal-body">'+
+				  '<p>' + config.message + '</p>'+
+				  '<div class="loading"></div>'+
+				'</div>'+
+			'</div>').appendTo($('body'));
+		}
+		else {
+			divLoading.find('p').html(config.message);
+		}
+
+		divLoading.modal(config.show? 'show' : 'hide');
+	};
+
 	return Modals;
 }));

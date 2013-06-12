@@ -2,12 +2,13 @@ define([
   'jquery',
   'underscore',
   'backbone',
+  'modals',
   'collections/movie',
   'views/movieCollection',
   'views/movieForm',
   'views/movie'
 ],
-function ($, _, Backbone, MovieCollection, MovieColllectionView, MovieFormView, MovieDetailView) {
+function ($, _, Backbone, Modals, MovieCollection, MovieColllectionView, MovieFormView, MovieDetailView) {
 
   //
   var movieCollection = new MovieCollection([]);
@@ -154,6 +155,14 @@ function ($, _, Backbone, MovieCollection, MovieColllectionView, MovieFormView, 
   var app = {
     initialize: function () {
 
+      //
+      $(document).on('ajaxSend', function () {
+        Modals.loading({show: true});
+      });
+      $(document).on('ajaxComplete', function () {
+        Modals.loading({show: false});
+      });
+      
       // Instanciamos
       var movieRouter = new MovieRouter();
 

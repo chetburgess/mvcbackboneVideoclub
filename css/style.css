@@ -1,3 +1,9 @@
 table .hide {
     display: none;
 }
+.loading {
+	height: 20px;
+	background-image: url('../img/loader.gif');
+	background-repeat: no-repeat;
+	background-position: center;
+}

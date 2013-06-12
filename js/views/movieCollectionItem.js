@@ -55,16 +55,33 @@ define([
             headers: {
               'IF-Match': self.model.get('_rev')
             },
-            dataType: 'text/json',
             // Si el modelo se elimino con exito
             success: function () {
 
               // Eliminamos la vista
               self.remove();
+
+              // Avisamos
+              Modals.success({
+                message: 'La pelicula fue eliminada con exito!',
+                close: function () {
+
+                  //@TODO ver si es necesario hacer algo
+                }
+              });
             },
             error: function () {
 
               // @TODO mostrar error
+
+              // Avisamos
+              Modals.error({
+                message: '',
+                close: function () {
+
+                  //@TODO ver si es necesario hacer algo
+                }
+              });
             }
           });
         }

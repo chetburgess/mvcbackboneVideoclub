@@ -13,7 +13,8 @@ require([
 	'router',
   'bootstrap',
   'modals'
-], function(App, bootstrap, modals) {
+], function(App, bootstrap, Modals) {
+
 
 	App.initialize();
 });

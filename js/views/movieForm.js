@@ -54,9 +54,9 @@ define([
 
           //self.collection.add([mod]); //@TODO ver si es necesario
 
-          // Solicitamos confirmacion
+          // Avisamos
           Modals.success({
-            message: 'La pelicula fue ' + (add? 'cargada' : 'actualizada') + 'con exito!',
+            message: 'La pelicula fue ' + (add? 'cargada' : 'actualizada') + ' con exito!',
             close: function () {
 
               //@TODO tenemos que volver a la vista del listado
