@@ -41,9 +41,10 @@ define([
 
       return this;
     },
-    doFetch: function(){
+    doFetch: function () {
+
       this.collection.fetch({
-        dataType: 'jsonp',
+        //dataType: 'jsonp',
         data: this.getFilterParams()
       });
     },
@@ -95,17 +96,21 @@ define([
       // Creamos las opciones del select
       this.setGenreFilter();
     },
-    loadColletionComponent: function(){
+
+    //
+    loadColletionComponent: function () {
       this.showPagination();
       this.showMovies();
     },
 
-    showPagination: function(){
+    //
+    showPagination: function () {
       
       this.$el.find('.pagination-container').append(this.paginationView.render().el);
     },
 
-    getFilterParams: function(){
+    //
+    getFilterParams: function () {
       return {
         'genre': this.$el.find('.genre').val(),
         'title': this.$el.find('.search').val()

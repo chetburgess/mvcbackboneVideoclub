@@ -17,15 +17,18 @@ define([
       'click .page-number': 'gotoPageNumber'
     },
 
-    initialize: function(){
+    initialize: function () {
+
       this.collection.on('sync', this.loadPageNumbers, this);
     },
 
     render: function () {
+
       this.loadPageNumbers();
       return this;
     },
-    loadPageNumbers: function(){
+    loadPageNumbers: function () {
+
       var navigationNumbers = Number(this.collection.totalItems)/this.collection.pageSize;
       var paginationData = {
         'totalItems': this.collection.totalItems,
@@ -35,16 +38,19 @@ define([
       };
       this.$el.html(this.template(paginationData));
     },
-    gotoPageNumber: function(evt){
+    gotoPageNumber: function (evt) {
+      
       var options = {'data': this.options.getFilterParams()};
       this.collection.goToPage(Number($(evt.currentTarget).text()), options);
     },
     goPreviousPage: function (evt) {
+
       var options = {'data': this.options.getFilterParams()};
       this.collection.previousPage(options);
       return false;
     },
     goNextPage: function (evt) {
+
       var options = {'data': this.options.getFilterParams()};
       this.collection.nextPage(options);
       return false;

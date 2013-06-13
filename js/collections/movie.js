@@ -13,24 +13,29 @@ define([
     pageSize : 10,
     url: 'http://socramg.iriscouch.com/videoclub/_design/app/_list/get/movies',
     parse: function (resp, options) {
+      
       this.totalItems = resp.total;
     	return resp.rows;
     },
-    nextPage: function(filterParams) {
+    nextPage: function (filterParams) {
+
       this.pageNumber = this.pageNumber + 1;
       return this.fetch(filterParams);
     },
-    previousPage: function(filterParams) {
+    previousPage: function (filterParams) {
+
       this.pageNumber = this.pageNumber - 1;
       return this.fetch(filterParams);
     },
-    goToPage: function(pageNumber, filterParams){
+    goToPage: function (pageNumber, filterParams) {
+
       this.pageNumber = pageNumber;
       return this.fetch(filterParams);
     },
-    fetch: function(options){
+    fetch: function (options) {
+
       var options = options || {};
-      options.dataType = 'jsonp';
+      //options.dataType = 'jsonp';
       $.extend(options.data || (options.data = {}), {
         'page': this.pageNumber,
         'size': this.pageSize
