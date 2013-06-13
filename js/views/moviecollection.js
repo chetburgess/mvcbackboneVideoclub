@@ -68,16 +68,9 @@ define([
       itemView.$el[show? 'removeClass' : 'addClass']('hide');
     },
 
-    dispalyLoading: function (show) {
-      
-      this.$el.find(this.itemListSelector).children().first()[show? 'removeClass':'addClass']('hide');
-    },
-
     // Cuando se reset-ea la collection, recargamos todas las peliculas
     showMovies: function () {
       var id;
-
-      this.dispalyLoading(false);
       
       // Eliminamos todas las vistas de los modelos
       for (id in this.itemsViews) {
@@ -159,7 +152,6 @@ define([
     filterItems: function() {
 
       //
-      this.dispalyLoading(false);
       this.collection.pageNumber = 1;
 
       //

@@ -17,7 +17,7 @@ define([
 			return this;
 		}
 
-	});	
+	});
 
 	return MovieDetailView;	
-});		
+});
