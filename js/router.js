@@ -70,18 +70,22 @@ function ($, _, Backbone, Modals, MovieCollection, MovieColllectionView,
     // Si no existiera una pelicula asociada al id, salta al listado
     showDetailView: function (id) {
 
-      var model = new movieCollection.model({_id: id}),
-        success = $.proxy(function (model) {
+      var success = $.proxy(function (model) {
+
+          if (!!this.views['detail']) {
+            // Destruimos
+            this.views['detail'].remove();
+          }
 
           // Si no esta
-          if (!this.views['detail']) {
+//          if (!this.views['detail']) {
 
             // Instanciamos
             this.views['detail'] = new MovieDetailView({model: model});
 
             // Renderizamos
             $('#main').append(this.views['detail'].render().el);
-          }
+
 
           // Cambiamos a esta vista
           this.toggleView('detail');
