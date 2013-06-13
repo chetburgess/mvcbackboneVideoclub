@@ -31,8 +31,7 @@ define([
     saveMovie: function (evt) {
       
       var attrs = {},
-        add = !this.model.id,
-        self = this; // Si no se paso un modelo
+        add = !this.model.id; // si no esta seteado el id, es porque es una pelicula nueva
 
       // Buscamos los inputs y obtenemos el valor
       $(evt.target).find(':input').not('button').each(function () {
@@ -47,15 +46,9 @@ define([
       this.model.save(attrs, {
         success: function (model, xhr, opt) {
 
-          //self.collection.add([mod]); //@TODO ver si es necesario
-
           // Avisamos
           Modals.success({
-            message: 'La pelicula fue ' + (add? 'cargada' : 'actualizada') + ' con exito!',
-            close: function () {
-
-              //@TODO tenemos que volver a la vista del listado
-            }
+            message: 'La pelicula fue ' + (add? 'cargada' : 'actualizada') + ' con exito!'
           });
         },
         error: function (mod, xhr, opt) {
@@ -69,11 +62,7 @@ define([
 
           // 
           Modals.error({
-            message: msg,
-            close: function () {
-
-              //@TODO ver si es necesario hacer algo
-            }
+            message: msg
           });
         }
       });

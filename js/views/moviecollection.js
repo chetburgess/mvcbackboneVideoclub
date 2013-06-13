@@ -27,8 +27,6 @@ define([
 
       // @NOTE la collection se adjunta automaticamente
       // Agregamos listeners
-      //this.collection.on('add', this.addMovie, this);
-      this.collection.on('reset', this.loadColletionComponent, this); 
       this.collection.on('sync', this.loadColletionComponent, this);
       this.paginationView = new PaginationView({
         collection: this.collection,
