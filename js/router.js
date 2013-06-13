@@ -59,6 +59,8 @@ function ($, _, Backbone, Modals, MovieCollection, MovieColllectionView,
         // Renderizamos
         $('#main').append(this.views['collection'].render().el);
       }
+
+      //
       this.views['collection'].doFetch();
 
       // Cambiamos a esta vista
@@ -72,20 +74,18 @@ function ($, _, Backbone, Modals, MovieCollection, MovieColllectionView,
 
       var success = $.proxy(function (model) {
 
+          // Si ua existe
           if (!!this.views['detail']) {
+
             // Destruimos
             this.views['detail'].remove();
           }
 
-          // Si no esta
-//          if (!this.views['detail']) {
+          // Instanciamos
+          this.views['detail'] = new MovieDetailView({model: model});
 
-            // Instanciamos
-            this.views['detail'] = new MovieDetailView({model: model});
-
-            // Renderizamos
-            $('#main').append(this.views['detail'].render().el);
-
+          // Renderizamos
+          $('#main').append(this.views['detail'].render().el);
 
           // Cambiamos a esta vista
           this.toggleView('detail');

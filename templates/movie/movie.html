@@ -6,5 +6,9 @@
   <dd><%= model.get('year') %></dd>
   <dt>Rating</dt>
   <dd><%= model.get('rating') %></dd>
+  <% if (model.get('poster') !== '') { %>
+  <dt>Poster</dt>
+  <dd><img src="<%= model.get('poster') %>" /></dd>
+  <% } %>
 </dl>
 <a href="#" class="btn">Volver a la lista</a>

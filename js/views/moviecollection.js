@@ -29,10 +29,9 @@ define([
       // Agregamos listeners
       this.collection.on('sync', this.loadColletionComponent, this);
       this.paginationView = new PaginationView({
-                                  collection: this.collection,
-                                  getFilterParams: $.proxy(this,'getFilterParams')
-                                });
-      this.doFetch();
+        collection: this.collection,
+        getFilterParams: $.proxy(this,'getFilterParams')
+      });
     },
 
     //
@@ -85,7 +84,6 @@ define([
         this.itemsViews[id].remove();
         delete this.itemsViews[id];
       }
-      this.itemsViews = {};
 
       // Vemos cuales son las peliculas en la collection
       _.each(this.collection.models, function (model) {
@@ -155,20 +153,12 @@ define([
     //
     filterItems: function() {
 
-      var self = this,
-        title;
-
-      this.selectedGenre = this.$el.find('.genre').val();
-      title = this.$el.find('.search').val();
-
       //
       this.dispalyLoading(false);
       this.collection.pageNumber = 1;
+
       //
-      this.collection.fetch({
-        dataType: 'jsonp',
-        data: {genre: this.selectedGenre, title: title}
-      });
+      this.doFetch();
 
       return false;
     },
