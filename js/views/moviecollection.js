@@ -158,7 +158,7 @@ define([
 
       //
       this.dispalyLoading(false);
-
+      this.collection.pageNumber = 1;
       //
       this.collection.fetch({
         dataType: 'jsonp',
