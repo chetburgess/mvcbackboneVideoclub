@@ -1,4 +1,9 @@
-  <td><%= model.get('title') %></td>
+  <td>
+		<% if (model.get('poster') !== '') { %>
+  	<img src="<%= model.get('poster') %>" class="thumb" />
+		<% } %>
+  	<%= model.get('title') %>
+  </td>
   <td><%= model.get('genre') %></td>
   <td><%= model.get('rating') %></td>
   <td>

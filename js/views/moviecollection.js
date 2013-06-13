@@ -104,7 +104,7 @@ define([
 
     showPagination: function(){
       
-      $('#paginacion').append(this.paginationView.render().el);
+      this.$el.find('.pagination-container').append(this.paginationView.render().el);
     },
 
     getFilterParams: function(){

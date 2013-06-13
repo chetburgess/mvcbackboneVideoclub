@@ -30,6 +30,14 @@
 	    	</select>
 		</div>
 	</div>
+	<div class="control-group">
+		<label class="control-label">Afiche</label>
+		<div class="controls">
+			<img <%= model && model.get('poster') !== ''? 'src="'+model.get('poster')+'"' : '' %> class="poster-img thumb <%= model && model.get('poster') !== ''? '' : 'hide' %>" />
+			<input type="file" class="poster uneditable-input" />
+			<div class="poster-loader loading hide" style="width: 200px"></div>
+		</div>
+	</div>
 	<% if (!!model.id) { %>
 	<input type="hidden" name="_id" value="<%= model.id %>" required />
 	<% } %>
