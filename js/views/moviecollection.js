@@ -31,9 +31,9 @@ define([
       this.collection.on('reset', this.loadColletionComponent, this); 
       this.collection.on('sync', this.loadColletionComponent, this);
       this.paginationView = new PaginationView({
-                                  collection: this.collection,
-                                  getFilterParams: $.proxy(this,'getFilterParams')
-                                });
+        collection: this.collection,
+        getFilterParams: $.proxy(this, 'getFilterParams')
+      });
     },
 
     //
@@ -99,7 +99,7 @@ define([
 
     showPagination: function(){
       
-      $('#paginacion').append(this.paginationView.render().el);
+      this.$el.find('.pagination-container').append(this.paginationView.render().el);
     },
 
     getFilterParams: function(){

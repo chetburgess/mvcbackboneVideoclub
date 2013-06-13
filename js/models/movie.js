@@ -12,7 +12,8 @@ define([
       title: '',
       year: 0,
       genre: '',
-      rating: 1
+      rating: 1,
+      poster: ''
     },
 
     validate: function (attrs) {
