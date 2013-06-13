@@ -30,7 +30,7 @@
 	    	</select>
 		</div>
 	</div>
-	<% if (model) { %>
+	<% if (!!model.id) { %>
 	<input type="hidden" name="_id" value="<%= model.id %>" required />
 	<% } %>
 	<div class="form-actions">
