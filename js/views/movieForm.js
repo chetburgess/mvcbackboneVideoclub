@@ -117,10 +117,17 @@ define([
 
           this.$el.find('.poster-loader').addClass('hide'); // Ocultamos
           this.$el.find('.poster').removeClass('hide'); // Mostramos
+
+          //
+          Modals.error({message: 'Ha ocurrido un error al intentar cargar el archivo'});
         }, this);
 
         // Comenzamos la carga del archivo
         reader.readAsDataURL(file);
+      }
+      else {
+        
+        Modals.error({message: 'El archivo ingresado no es una imagen'});
       }
     }
   });
