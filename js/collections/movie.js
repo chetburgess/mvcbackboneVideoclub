@@ -8,9 +8,33 @@ define([
   // MovieCollection, es una clase que que agrupa/ordena/pagina/etc modelos del mismo tipo
   var MovieCollection = Backbone.Collection.extend({
     model: MovieModel,
+    totalItems : 0,
+    pageNumber : 1,
+    pageSize : 10,
     url: 'http://socramg.iriscouch.com/videoclub/_design/app/_list/get/movies',
     parse: function (resp, options) {
+      this.totalItems = resp.total;
     	return resp.rows;
+    },
+    nextPage: function() {
+      this.pageNumber = this.pageNumber + 1;
+      return this.fetch();
+    },
+    previousPage: function() {
+      this.pageNumber = this.pageNumber - 1;
+      return this.fetch();
+    },
+    goToPage: function(pageNumber){
+      this.pageNumber = pageNumber;
+      return this.fetch();
+    },
+    fetch: function(options){
+      var options = options || {};
+      options.dataType = 'jsonp';
+      $.extend(options.data || (options.data = {}), {
+        'page': this.pageNumber,
+      });
+      Backbone.Collection.prototype.fetch.call(this, options);
     }
   });
 

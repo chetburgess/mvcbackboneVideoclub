@@ -1,11 +1,9 @@
 <div class="pagination">
   <ul class="item-list-container">
-    <!--li><a href="#">Prev</a></li>
-    <li><a href="#">1</a></li>
-    <li><a href="#">2</a></li>
-    <li><a href="#">3</a></li>
-    <li><a href="#">4</a></li>
-    <li><a href="#">5</a></li>
-    <li><a href="#">Next</a></li-->
+			<li class="previous <%= pageNumber === 1? 'disabled': 'go-previous' %>"><a href="#">Prev</a></li>
+    <% for ( i=1 ; i<=navigationNumbers ; i++ ){ %>
+			<li class="<%= pageNumber == i ? 'disabled' : 'page-number' %>"><a href="#"><%= i %></a></li>
+    <% } %>
+			<li class="next <%= pageNumber === navigationNumbers? 'disabled': 'go-next' %>"><a href="#">Next</a></li>
   </ul>
 </div>
