@@ -99,7 +99,7 @@ define([
 
     showPagination: function(){
       
-      $('#main').append(this.paginationView.render().el);
+      $('#paginacion').append(this.paginationView.render().el);
     },
 
     getFilterParams: function(){
