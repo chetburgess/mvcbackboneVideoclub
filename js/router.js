@@ -59,9 +59,7 @@ function ($, _, Backbone, Modals, MovieCollection, MovieColllectionView,
         // Renderizamos
         $('#main').append(this.views['collection'].render().el);
       }
-
-      //
-      movieCollection.fetch({dataType: 'jsonp'});
+      this.views['collection'].doFetch();
 
       // Cambiamos a esta vista
       this.toggleView('collection');

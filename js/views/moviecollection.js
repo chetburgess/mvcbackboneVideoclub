@@ -32,6 +32,7 @@ define([
                                   collection: this.collection,
                                   getFilterParams: $.proxy(this,'getFilterParams')
                                 });
+      this.doFetch();
     },
 
     //
@@ -40,6 +41,12 @@ define([
       this.$el.html(MovieCollectionHTML);
 
       return this;
+    },
+    doFetch: function(){
+      this.collection.fetch({
+        dataType: 'jsonp',
+        data: this.getFilterParams()
+      });
     },
 
     // Hash para referenciar la vista de un modelo puntual
