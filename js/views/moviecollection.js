@@ -28,7 +28,6 @@ define([
       // @NOTE la collection se adjunta automaticamente
       // Agregamos listeners
       //this.collection.on('add', this.addMovie, this);
-      this.collection.on('remove', this.removeMovie, this);
       this.collection.on('reset', this.loadColletionComponent, this); 
       this.collection.on('sync', this.loadColletionComponent, this);
       this.paginationView = new PaginationView({
@@ -58,13 +57,6 @@ define([
       this.itemsViews[model.id] = itemView;
     },
 
-    // Elimina una pelicula de la grilla
-    removeMovie: function (model) {
-
-      // Borramos la referencia a la pelicula
-      delete this.itemsViews[model.id];
-    },
-
     // Muestra/Oculta la view de una pelicula en la grilla
     displayItemView: function (itemView, show) {
 
@@ -78,8 +70,17 @@ define([
 
     // Cuando se reset-ea la collection, recargamos todas las peliculas
     showMovies: function () {
+      var id;
 
       this.dispalyLoading(false);
+      
+      // Eliminamos todas las vistas de los modelos
+      for (id in this.itemsViews) {
+
+        this.itemsViews[id].remove();
+        delete this.itemsViews[id];
+      }
+      this.itemsViews = {};
 
       // Vemos cuales son las peliculas en la collection
       _.each(this.collection.models, function (model) {
@@ -150,18 +151,10 @@ define([
     filterItems: function() {
 
       var self = this,
-        id,
         title;
 
       this.selectedGenre = this.$el.find('.genre').val();
       title = this.$el.find('.search').val();
-      
-      // Eliminamos todas las vistas de los modelos
-      for (id in this.itemsViews) {
-
-        this.itemsViews[id].remove();
-      }
-      this.itemsViews = {};
 
       //
       this.dispalyLoading(false);

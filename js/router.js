@@ -107,11 +107,19 @@ function ($, _, Backbone, Modals, MovieCollection, MovieColllectionView,
           this.views['form'].remove();
         }
 
+        if (!model){
+          model = new movieCollection.model({});
+        }
+
         // Instanciamos
         this.views['form'] = new MovieFormView({
           collection: movieCollection
           , model: model
         });
+
+        this.views['form'].listenTo(this.views['form'].model,'sync',$.proxy(function(){
+          this.navigate('', {trigger: true});
+        },this));
 
         // Renderizamos
         $('#main').append(this.views['form'].render().el);
@@ -136,19 +144,23 @@ function ($, _, Backbone, Modals, MovieCollection, MovieColllectionView,
       
       var model = new movieCollection.model({_id: id}),
         error = $.proxy(function () {
-
+          
           // Mostramos el listado
           this.navigate('', {trigger: true});
         }, this);
 
+
+
       // Buscamos los datos de la pelicula
       model.fetch({
-        success: function (model, resp, options) {
-
-          callback(model);
+       success: function (model, resp, options) {
+          model.once('sync', function(model){
+            callback(model);
+          },this);        
         },
         error: error
       });
+
     }
   });
 

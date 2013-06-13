@@ -29,10 +29,9 @@ define([
     // Guardamos los cambios en el modelo
     saveMovie: function (evt) {
       
-      var attrs = {}
-        , model = this.model 
-        , add = !model
-        , self = this; // Si no se paso un modelo
+      var attrs = {},
+        add = !this.model.id,
+        self = this; // Si no se paso un modelo
 
       // Buscamos los inputs y obtenemos el valor
       $(evt.target).find(':input').not('button').each(function () {
@@ -43,14 +42,9 @@ define([
       attrs.rating = Number(attrs.rating);
       attrs.year = Number(attrs.year);
 
-      // Si es nuevo
-      if (add) {        
-        model = new this.collection.model({});
-      }
-
       // Guardamos
-      model.save(attrs, {
-        success: function (mod, xhr, opt) {
+      this.model.save(attrs, {
+        success: function (model, xhr, opt) {
 
           //self.collection.add([mod]); //@TODO ver si es necesario
 
