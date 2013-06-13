@@ -3,8 +3,9 @@ define([
   'underscore',
   'backbone',
   'text!/templates/movie/movieCollection.html',
-  'views/movieCollectionItem'
-], function($, _, Backbone, MovieCollectionHTML, MovieCollectionItemView) {
+  'views/movieCollectionItem',
+  'views/paginatorView'
+], function($, _, Backbone, MovieCollectionHTML, MovieCollectionItemView, PaginationView) {
   
   // MovieCollectionView es un clase que representa la vista de
   // la pelicula completa del listado de peliculas
@@ -28,8 +29,12 @@ define([
       // Agregamos listeners
       //this.collection.on('add', this.addMovie, this);
       this.collection.on('remove', this.removeMovie, this);
-      this.collection.on('reset', this.showMovies, this);
-      this.collection.on('sync', this.showMovies, this);
+      this.collection.on('reset', this.loadColletionComponent, this); 
+      this.collection.on('sync', this.loadColletionComponent, this);
+      this.paginationView = new PaginationView({
+                                  collection: this.collection,
+                                  getFilterParams: $.proxy(this,'getFilterParams')
+                                });
     },
 
     //
@@ -85,6 +90,22 @@ define([
 
       // Creamos las opciones del select
       this.setGenreFilter();
+    },
+    loadColletionComponent: function(){
+      this.showPagination();
+      this.showMovies();
+    },
+
+    showPagination: function(){
+      
+      $('#main').append(this.paginationView.render().el);
+    },
+
+    getFilterParams: function(){
+      return {
+        'genre': this.$el.find('.genre').val(),
+        'title': this.$el.find('.search').val()
+      }
     },
 
     // Genero seleccionado

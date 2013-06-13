@@ -16,23 +16,24 @@ define([
       this.totalItems = resp.total;
     	return resp.rows;
     },
-    nextPage: function() {
+    nextPage: function(filterParams) {
       this.pageNumber = this.pageNumber + 1;
-      return this.fetch();
+      return this.fetch(filterParams);
     },
-    previousPage: function() {
+    previousPage: function(filterParams) {
       this.pageNumber = this.pageNumber - 1;
-      return this.fetch();
+      return this.fetch(filterParams);
     },
-    goToPage: function(pageNumber){
+    goToPage: function(pageNumber, filterParams){
       this.pageNumber = pageNumber;
-      return this.fetch();
+      return this.fetch(filterParams);
     },
     fetch: function(options){
       var options = options || {};
       options.dataType = 'jsonp';
       $.extend(options.data || (options.data = {}), {
         'page': this.pageNumber,
+        'size': this.pageSize
       });
       Backbone.Collection.prototype.fetch.call(this, options);
     }

@@ -22,6 +22,7 @@ define([
     },
 
     render: function () {
+      this.loadPageNumbers();
       return this;
     },
     loadPageNumbers: function(){
@@ -35,15 +36,17 @@ define([
       this.$el.html(this.template(paginationData));
     },
     gotoPageNumber: function(evt){
-      //@TODO use href attribute, in combination with filter query params
-      this.collection.goToPage(Number($(evt.currentTarget).text()));
+      var options = {'data': this.options.getFilterParams()};
+      this.collection.goToPage(Number($(evt.currentTarget).text()), options);
     },
     goPreviousPage: function (evt) {
-      this.collection.previousPage();
+      var options = {'data': this.options.getFilterParams()};
+      this.collection.previousPage(options);
       return false;
     },
     goNextPage: function (evt) {
-      this.collection.nextPage();
+      var options = {'data': this.options.getFilterParams()};
+      this.collection.nextPage(options);
       return false;
     }
   });
