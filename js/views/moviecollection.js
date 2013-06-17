@@ -117,7 +117,7 @@ define([
     //
     getFilterParams: function () {
       return {
-        'genre': this.$el.find('.genre').val(),
+        'genre': this.selectedGenre = this.$el.find('.genre').val(),
         'title': this.$el.find('.search').val()
       }
     },
