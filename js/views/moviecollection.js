@@ -2,10 +2,11 @@ define([
   'jquery',
   'underscore',
   'backbone',
+  'modals',
   'text!/templates/movie/movieCollection.html',
   'views/movieCollectionItem',
   'views/paginatorView'
-], function($, _, Backbone, MovieCollectionHTML, MovieCollectionItemView, PaginationView) {
+], function($, _, Backbone, Modals, MovieCollectionHTML, MovieCollectionItemView, PaginationView) {
   
   // MovieCollectionView es un clase que representa la vista de
   // la pelicula completa del listado de peliculas
@@ -45,7 +46,18 @@ define([
 
       this.collection.fetch({
         //dataType: 'jsonp',
-        data: this.getFilterParams()
+        data: this.getFilterParams(),
+        error: function () {
+
+          // Avisamos
+          Modals.error({
+            message: 'El servidor no responde aguarda unos segundos e intenta nuevamente',
+            close: function () {
+
+              //@TODO ver si es necesario hacer algo
+            }
+          });
+        }
       });
     },
 
