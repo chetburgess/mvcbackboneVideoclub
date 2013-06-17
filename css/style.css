@@ -1,3 +1,22 @@
+header {
+  text-align: center;
+}
+.logo {
+  display: inline-block;
+  width: 220px;
+  height: 155px;
+  margin-top: -14px;
+}
+.logo img {
+  width: 200px;
+}
+header h1 {
+  display: inline-block;
+}
+header p span {
+  text-decoration: line-through;
+}
+
 table .hide {
     display: none;
 }
