@@ -18,8 +18,9 @@ define([
     },
 
     initialize: function () {
+      _.bindAll(this, ['loadPageNumbers']);
 
-      this.collection.on('sync', this.loadPageNumbers, this);
+      this.listenTo(this.collection, 'sync', this.loadPageNumbers);
     },
 
     render: function () {
@@ -29,30 +30,37 @@ define([
     },
     loadPageNumbers: function () {
 
-      var navigationNumbers = Number(this.collection.totalItems)/this.collection.pageSize;
-      var paginationData = {
-        'totalItems': this.collection.totalItems,
-        'pageNumber': Number(this.collection.pageNumber),
-        'pageSize': this.collection.pageSize,
-        'navigationNumbers': Math.ceil(navigationNumbers)
-      };
-      this.$el.html(this.template(paginationData));
+      this.totalPages = Math.ceil(this.collection.totalItems / this.collection.pageSize);
+      
+      this.$el.html(this.template({
+        totalItems: this.collection.totalItems,
+        pageNumber: this.collection.pageNumber,
+        pageSize: this.collection.pageSize,
+        totalPages: this.totalPages
+      }));
+    },
+    changePage: function (page) {
+      
+      if (page >= 1 && page <= this.totalPages) {
+
+        this.tigger('changePage', page);
+      }
+      return false;
     },
     gotoPageNumber: function (evt) {
       
-      var options = {'data': this.options.getFilterParams()};
-      this.collection.goToPage(Number($(evt.currentTarget).text()), options);
+      this.changePage(Number($(evt.currentTarget).text());
     },
     goPreviousPage: function (evt) {
-
-      var options = {'data': this.options.getFilterParams()};
-      this.collection.previousPage(options);
+      
+      var page = this.collection.pageNumber;
+      this.changePage(page--);
       return false;
     },
     goNextPage: function (evt) {
-
-      var options = {'data': this.options.getFilterParams()};
-      this.collection.nextPage(options);
+      
+      var page = this.collection.pageNumber;
+      this.changePage(page++);
       return false;
     }
   });
