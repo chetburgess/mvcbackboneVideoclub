@@ -1,0 +1,48 @@
+
+<h3><%= model? 'Editar' : 'Nueva' %> pelicula</h3>
+<hr />
+<form class="form-horizontal movie-form" action="#new/save">
+	<div class="control-group">
+		<label class="control-label">Titulo <em>(*)</em></label>
+		<div class="controls">
+			<input type="text" name="title" value="<%= model? model.get('title') : '' %>" required title="Ingresa el titulo de la pelicula" />
+		</div>
+	</div>
+	<div class="control-group">
+		<label class="control-label">Genero <em>(*)</em></label>
+		<div class="controls">
+			<input type="text" name="genre" value="<%= model? model.get('genre') : '' %>" required title="Ingresa el genero de la pelicula" />
+		</div>
+	</div>
+	<div class="control-group">
+		<label class="control-label">A&ntilde;o <em>(*)</em></label>
+		<div class="controls">
+			<input type="text" name="year" class="input-small" value="<%= model? model.get('year') : '' %>" required title="Indica el a&ntilde;o de la pelicula" />
+		</div>
+	</div>
+	<div class="control-group">
+		<label class="control-label">Calificaci&oacute;n <em>(*)</em></label>
+		<div class="controls">
+	    	<select class="input-mini rating" name="rating" title="Indica la calificaci&oacute;n de la pelicula">
+<% for (i=1;i<6;i++){ %> 
+				<option <% if (model && i == model.get('rating')){ print('selected'); } %> value="<%= i %>"><%= i %></option>
+<% } %>				
+	    	</select>
+		</div>
+	</div>
+	<div class="control-group">
+		<label class="control-label">Afiche</label>
+		<div class="controls">
+			<img <%= model && model.get('poster') !== ''? 'src="'+model.get('poster')+'"' : '' %> class="poster-img thumb <%= model && model.get('poster') !== ''? '' : 'hide' %>" />
+			<input type="file" class="poster uneditable-input" />
+			<div class="poster-loader loading hide" style="width: 200px"></div>
+		</div>
+	</div>
+	<% if (!!model.id) { %>
+	<input type="hidden" name="_id" value="<%= model.id %>" required />
+	<% } %>
+	<div class="form-actions">
+		<a href="#" class="btn">Cancelar</a>
+		<button type="submit" class="btn btn-primary save">Guardar</button>
+	</div>
+</form>

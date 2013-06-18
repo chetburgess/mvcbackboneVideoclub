@@ -1,191 +1,189 @@
 define([
-    'jquery',
-    'underscore',
-    'backbone',
-    'collections/MovieCollection',
-    'views/moviecollection',
-    'views/movieformview'
+  'jquery',
+  'underscore',
+  'backbone',
+  'modals',
+  'collections/movie',
+  'views/movieCollection',
+  'views/movieForm',
+  'views/movie'
 ],
-function ($, _, Backbone, MovieCollection, MovieColllectionView, MovieFormView) {
-    
-    var movieCollection = new MovieCollection([]);
-    movieCollection.fetch();
-    console.log(movieCollection.pluck('title'));
-    
-    // MovieRouter, es una clase que mapea la URL para convertirlas en acciones
-    // y dispara eventos cuando "coincide"
-    var MovieRouter = Backbone.Router.extend({
-        routes: {
-            // Las acciones no agregan "Movie", por que el rotuer es "Movie"
-            '': 'showCollectionView',
-            'movies/detail/:id': 'showDetailView',
-            'movies/new': 'showFormView', // @TODO ver si usamos "addMovie" en su lugar o da igual
-            'movies/edit/:id': 'showFormView'
-        },
-        
-        // Indicardor para la vista actual
-        currentView: null,
-        
-        // Oculta (add className hidden), si estuviera setea, la vista actual
-        hideCurrentView: function () {
-            
-            // Si esta seteado
-            if (!!this.currentView) {
-                
-                this.currentView.$el.addClass('hidden');
-            }
-        },
-        
-        // Muestra (remove className hidden), la vista indicada
-        showView: function (view) {
-            
-            view.$el.removeClass('hidden');
-        },
-        
-        // Instancia, si no estuviese previamente creada, y renderiza
-        // la vista MovieColllectioView
-        showCollectionView: function () {
-            
-            // Ocultamos la vista
-            this.hideCurrentView();
-            
-            // Si no esta instanciada
-            if (!this.moviesCollectionView) {
-                
-                // Instanciamos
-                this.moviesCollectionView = new MovieColllectionView(movieCollection);
-                
-                // Agregamos listeners
-                this.moviesCollectionView.on('addMovie', 'addMovie', this);
-                
-                // Renderizamos
-                this.moviesCollectionView.render();
-            }
-            else {
-                
-                // Mostramos la vista (que pudiera estar oculta)
-                this.showView(this.moviesCollectionView);
-            }
-            
-            // La seteamos como la vista acutal
-            this.currentView = this.moviesCollectionView;
-            
-            //
-            this.navigate('');
-        },
-        
-        // Instancia, si no estuviese previamente creada, y renderiza
-        // la vista MovieDetailView
-        // Si no existiera una pelicula asociada al id, salta al listado
-        showDetailView: function (id) {
-            
-            // Controlamos que el modelo este en la collection
-            var model = movieCollection.get(id);
-            if (!!model) {
-                    
-                // Ocultamos la vista
-                this.hideCurrentView();
-                
-                // Si no esta, instanciamos
-                if (!this.movieDetailView) {
-                    
-                    this.movieDetailView = new MovieDetailView();
-                    
-                    // Agregamos listeners
-                    this.movieDetailView.on('backward', 'showCollectionView');
-                    
-                    // Renderizamos
-                    this.movieDetailView.render();
-                }
-                
-                // Mostramos la vista (que pudiera estar oculta)
-                this.showView(this.movieDetailView);
-                
-                // La seteamos como la vista acutal
-                this.currentView = this.movieDetailView;
-                
-                //
-                this.navigate('movies/detail/' + id);
-            }
-            else {
-                
-                // Si no esta mostramos el listado
-                this.showCollectionView();
-            }
-        },
-        movieSaved: function(res, res2){
-//debugger;
-        },
-        // Instancia, si no estuviese previamente creada, y renderiza
-        // la vista MovieFormView
-        // Si no existiera una pelicula asociada al id, salta al listado
-        showFormView: function (id) {
-            var model, 
-                editing = true, // Estado del formulario
-                nav = 'edit/' + id; // Donde navegar
-            
-            // Si pasamos un id
-            if (!!id) {
-                
-                // Controlamos que el modelo este en la collection
-                model = movieCollection.get(id);
-                if (!model) {
-                    
-                    // Lo enviamos la vista del listado
-                    this.showCollectionView();
-                    
-                    return false; // @TODO ver si esto afecta de alguna forma
-                }
-            }
-            else {
-                
-                editing = false;
-                nav = 'new';
-                model = new movieCollection.model();
-            }
-            
-            // Ocultamos la vista
-            this.hideCurrentView();
-            
-            // Si no esta, instanciamos
-            if (!this.movieFormView) {
-                
-                this.movieFormView = new MovieFormView({model: model, movieCollection: movieCollection});
-                
-                // Agregamos listeners
-                //this.movieFormView.on('savedMovie', this.movieSaved);
-                
-                // Renderizamos
-                this.movieFormView.render();
-            }
-            
-            //
-            // @TODO Ver como le avisamos a la vista el "cambio de estado" (editing true o false)
-            //
-            
-            // Mostramos la vista (que pudiera estar oculta)
-            this.showView(this.movieFormView);
-            
-            // La seteamos como la vista acutal
-            this.currentView = this.movieFormView;
-                
-            //@TODO is this necessary?
-            this.navigate('movies/' + nav);
-        },
-        
-        addMovie: function () {
-            
-            this.showFormView(false);
+function ($, _, Backbone, Modals, MovieCollection, MovieColllectionView,
+          MovieFormView, MovieDetailView) {
+
+  //
+  var movieCollection = new MovieCollection([]);
+
+  // MovieRouter, es una clase que mapea la URL para convertirlas en acciones
+  // y dispara eventos cuando "coincide"
+  var MovieRouter = Backbone.Router.extend({
+    routes: {
+      // Las acciones no agregan "Movie", por que el rotuer es "Movie"
+      '': 'showCollectionView',
+      'movies/detail/:id': 'showDetailView',
+      'movies/new': 'showFormView',
+      'movies/edit/:id': 'showFormView'
+    },
+
+    // Referencia para la vista actual
+    currentView: null,
+
+    // Oculta (add className hide), si estuviera, la vista actual
+    // y muestra (remove className hide) la view indicada
+    toggleView: function (viewName) {
+
+      // Si hay una view mostrandose
+      if (!!this.currentView) {
+        this.currentView.$el.addClass('hide');
+      }
+
+      // Mostramos la vista indicada
+      this.views[viewName].$el.removeClass('hide');
+
+      // Indicamos la vista en curso
+      this.currentView = this.views[viewName];
+    },
+
+    // Hash de vistas cargadas
+    views: {},
+
+    // Instancia, si no estuviese previamente creada, y renderiza
+    // la vista MovieColllectioView
+    showCollectionView: function () {
+      // Si no esta
+      if (!this.views['collection']) {
+
+        // Instanciamos
+        this.views['collection'] = new MovieColllectionView({collection: movieCollection});
+
+        // Renderizamos
+        $('#main').append(this.views['collection'].render().el);
+      }
+
+      //
+      this.views['collection'].doFetch();
+
+      // Cambiamos a esta vista
+      this.toggleView('collection');
+    },
+
+    // Instancia, si no estuviese previamente creada, y renderiza
+    // la vista MovieDetailView
+    // Si no existiera una pelicula asociada al id, salta al listado
+    showDetailView: function (id) {
+
+      var success = $.proxy(function (model) {
+
+          // Si ua existe
+          if (!!this.views['detail']) {
+
+            // Destruimos
+            this.views['detail'].remove();
+          }
+
+          // Instanciamos
+          this.views['detail'] = new MovieDetailView({model: model});
+
+          // Renderizamos
+          $('#main').append(this.views['detail'].render().el);
+
+          // Cambiamos a esta vista
+          this.toggleView('detail');
+      }, this);
+
+      // Validamos que la pelicula exista
+      this.validateMovie(id, success);
+    },
+
+    // Instancia, si no estuviese previamente creada, y renderiza
+    // la vista MovieFormView
+    // Si no existiera una pelicula asociada al id, salta al listado
+    showFormView: function (id) {
+
+      var success = $.proxy(function (model) {
+
+        // Si esta
+        if (!!this.views['form']) {
+
+          // Destruimos
+          this.views['form'].remove();
         }
-    });
-    
-    var app = {
-        initialize: function () {
-            
-            var movieRouter = new MovieRouter();
-            Backbone.history.start();
+
+        if (!model){
+          model = new movieCollection.model({});
         }
-    };
-    
-    return app;
+
+        // Instanciamos
+        this.views['form'] = new MovieFormView({
+          collection: movieCollection
+          , model: model
+        });
+
+        this.views['form'].listenTo(this.views['form'].model,'sync',$.proxy(function(){
+          this.navigate('', {trigger: true});
+        },this));
+
+        // Renderizamos
+        $('#main').append(this.views['form'].render().el);
+
+        // Cambiamos a esta vista
+        this.toggleView('form');
+      }, this);
+
+      // Si pasamos un id
+      if (!!id) {
+
+        // Validamos que la pelicula exista
+        this.validateMovie(id, success);
+      }
+      else {
+        success(false);
+      }
+    },
+
+    //
+    validateMovie: function (id, callback) {
+      
+      var model = new movieCollection.model({_id: id}),
+        error = $.proxy(function () {
+          
+          // Mostramos el listado
+          this.navigate('', {trigger: true});
+        }, this);
+
+
+
+      // Buscamos los datos de la pelicula
+      model.fetch({
+       success: function (model, resp, options) {
+          model.once('sync', function(model){
+            callback(model);
+          },this);        
+        },
+        error: error
+      });
+
+    }
+  });
+
+  var app = {
+    initialize: function () {
+
+      //
+      $(document).on('ajaxSend', function () {
+        Modals.loading({show: true});
+      });
+      $(document).on('ajaxComplete', function () {
+        Modals.loading({show: false});
+      });
+      
+      // Instanciamos
+      var movieRouter = new MovieRouter();
+
+      // Iniciamos
+      Backbone.history.start();
+    }
+  };
+
+  return app;
 });

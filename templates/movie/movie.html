@@ -1,0 +1,14 @@
+<h3><%= model.get('title') %></h3>
+<dl class="dl-horizontal">
+  <dt>Genero</dt>
+  <dd><%= model.get('genre') %></dd>
+  <dt>A&ntilde;o</dt>
+  <dd><%= model.get('year') %></dd>
+  <dt>Rating</dt>
+  <dd><%= model.get('rating') %></dd>
+  <% if (model.get('poster') !== '') { %>
+  <dt>Poster</dt>
+  <dd><img src="<%= model.get('poster') %>" /></dd>
+  <% } %>
+</dl>
+<a href="#" class="btn">Volver a la lista</a>

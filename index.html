@@ -2,22 +2,22 @@
 <html>
 <head>
   <title>Backbone App</title>
+  <link rel="stylesheet" href="css/style.css" />
   <link rel="stylesheet" href="css/bootstrap.css" />
   <script data-main="js/main" src="js/libs/require.js"></script>
 </head>
 <body>
 	<header>
-	  <div class="container">
-	  	<h1>Backbone Videoclub</h1>
-	  	<p class="lead">Todas las peliculas en tu "localStorage" ;)</p>
-	  </div>
+  	<div class="logo">
+  		<img src="img/couch.png" />
+  	</div>
+  	<h1>Backbone Videoclub</h1>
+  	<p class="lead">Las peliculas que mas te gustan <span>en tu "localStorage"</span> ;)</p>
 	</header>
 	<hr />
   <div class="container">
     <div id="main" class="row"></div>
   </div>
-  <div id="movie-form-container"></div>
-  <div id="movie-collection-container"></div>
 </body>
 	<script id="movie-form" type="text/x-handlebars-template">
 	  <form action="#" class="hidden">
