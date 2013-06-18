@@ -1,7 +1,7 @@
 
 <h3><%= model.id !== ''? 'Editar' : 'Nuevo' %> usuario</h3>
 <hr />
-<form class="form-horizontal movie-form" action="#users/new/save">
+<form class="form-horizontal user-form" action="#users/new/save">
 	<div class="control-group">
 		<label class="control-label">Nombre <em>(*)</em></label>
 		<div class="controls">
@@ -23,10 +23,10 @@
 	<div class="control-group">
 		<label class="control-label">Nivel <em>(*)</em></label>
 		<div class="controls">
-	    	<select class="input-mini level" name="level" required title="Selecciona el nivel del usuario">
+	    	<select class="input level" name="level" required title="Selecciona el nivel del usuario">
 					<option <% if (model.get('level') === ''){ print('selected'); } %> value="">Seleccionar</option>
-					<option <% if (model.get('level') === 'admin'){ print('selected'); } %> value="">Administrador</option>
-					<option <% if (model.get('level') === 'client'){ print('selected'); } %> value="">Cliente</option>
+					<option <% if (model.get('level') === 'admin'){ print('selected'); } %> value="admin">Administrador</option>
+					<option <% if (model.get('level') === 'client'){ print('selected'); } %> value="client">Cliente</option>
 	    	</select>
 		</div>
 	</div>

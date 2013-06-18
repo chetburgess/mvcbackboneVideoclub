@@ -43,13 +43,13 @@ define([
       
       if (page >= 1 && page <= this.totalPages) {
 
-        this.tigger('changePage', page);
+        this.trigger('changePage', page);
       }
       return false;
     },
     gotoPageNumber: function (evt) {
       
-      this.changePage(Number($(evt.currentTarget).text());
+      this.changePage(Number($(evt.currentTarget).text()));
     },
     goPreviousPage: function (evt) {
       

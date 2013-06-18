@@ -2,7 +2,7 @@ define([
   'underscore',
   'backbone',
   'text!/templates/users/collection.html',
-  'views/userCollectionItem',
+  'views/usersCollectionItem',
   'views/paginatorView'
 ], function(_, Backbone, UsersCollectionHTML, UsersCollectionItemView, PaginationView) {
   
@@ -15,7 +15,7 @@ define([
 
     //
     events: {
-      'change .genre': 'doSearch',
+      'change .level': 'doSearch',
       'click .doSearch': 'doSearch',
       'keypress .search': 'matchEnter'
     },
@@ -23,14 +23,12 @@ define([
     //
     initialize: function () {
 
-      _.bindAll(this, ['renderCollection', 'filterItems']);
-
       // Agregamos listeners
-      this.listenTo(this.collection, 'sync', this.renderCollection);
+      this.listenTo(this.collection, 'sync', _.bind(this.renderCollection, this));
 
       //
       this.paginationView = new PaginationView({collection: this.collection});
-      this.listenTo(this.paginationView, 'changePage', this.filterItems);
+      this.listenTo(this.paginationView, 'changePage', _.bind(this.filterItems, this));
     },
 
     //
@@ -46,7 +44,15 @@ define([
     addUser: function (model) {
 
       var itemView = new UsersCollectionItemView({model: model});
+      this.listenTo(itemView, 'removeModel', _.bind(this.removeUser, this));
+
+      //
       this.$el.find('.list-container').append(itemView.render().el);
+    },
+
+    removeUser: function (view) {
+
+      this.trigger('removeUser', view);
     },
 
     // Cuando se reset-ea la collection, recargamos todas las peliculas
@@ -58,56 +64,14 @@ define([
           // La agregamos
           this.addUser(model);
       }, this);
-
-      // Creamos las opciones del select
-      this.setGenreFilter();
-    },
-
-    // Genero seleccionado
-    selectedGenre: '',
-
-    // 
-    setGenreFilter: function () {
-
-      var select = this.$el.find('.genre'),
-        genres = _.uniq(this.collection.pluck('genre'), false, function (genre) {
-          return genre;
-        }),
-        genreSet = this.selectedGenre;
-
-      // Limpiamos
-      select.html('');
-
-      // Agregamos el all
-      $('<option/>', {
-        value: '',
-        text: 'Todos'
-      }).appendTo(select);
-
-      //
-      _.each(genres, function (genre) {
-
-        var option = $('<option/>', {
-          value: genre.toLowerCase(),
-          text: genre
-        }).appendTo(select);
-
-        if (genreSet === genre.toLowerCase()) {
-
-          option[option.length - 1].selected = true;
-        }
-      });
-
-      //
-      return select;
     },
 
     //
-    filterItems: function(page) {
+    filterItems: function (page) {
 
       var params = {
       	page: 1,
-        genre: this.selectedGenre = this.$el.find('.genre').val(),
+        level: this.$el.find('.level').val(),
         title: this.$el.find('.search').val()
       };
 
@@ -116,7 +80,7 @@ define([
       	params.page = page;
       }
 
-      this.trigger('filterItems', params);
+      this.trigger('filterItems', this, params);
       return false;
     },
 

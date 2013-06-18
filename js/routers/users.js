@@ -3,20 +3,20 @@ define([
   'underscore',
   'backbone',
   'modals',
-  'collections/user',
-  'views/userCollection',
-  'views/userForm',
-  'views/userDetail'
+  'collections/users',
+  'views/usersCollection',
+  'views/usersForm',
+  'views/usersDetail'
 ],
-function ($, _, Backbone, Modals, UserCollection, UserColllectionView,
-          UserFormView, UserDetailView) {
+function ($, _, Backbone, Modals, UsersCollection, UsersColllectionView,
+          UsersFormView, UsersDetailView) {
 
   //
-  var UserCollection = new UserCollection([]);
+  var usersCollection = new UsersCollection([]);
 
-  // UserRouter, es una clase que mapea la URL para convertirlas en acciones
+  // UsersRouter, es una clase que mapea la URL para convertirlas en acciones
   // y dispara eventos cuando "coincide"
-  var UserRouter = Backbone.Router.extend({
+  var UsersRouter = Backbone.Router.extend({
     routes: {
       'users': 'showCollectionView',
       'users/detail/:id': 'showDetailView',
@@ -47,47 +47,104 @@ function ($, _, Backbone, Modals, UserCollection, UserColllectionView,
     views: {},
 
     // Instancia, si no estuviese previamente creada, y renderiza
-    // la vista UserColllectioView
+    // la vista UsersColllectioView
     showCollectionView: function () {
+      var view = this.views['collection'];
+
       // Si no esta
-      if (!this.views['collection']) {
+      if (!view) {
 
         // Instanciamos
-        this.views['collection'] = new UserColllectionView({collection: UserCollection});
+        view = new UsersColllectionView({collection: usersCollection});
+        this.listenTo(view, 'filterItems', this.filterUsers);
+        this.listenTo(view, 'removeUser', this.confirmRemoveUser);
 
         // Renderizamos
-        $('#main').append(this.views['collection'].render().el);
+        $('#main').append(view.render().el);
       }
+      this.filterUsers();
 
       //
-      this.views['collection'].doFetch();
+      this.views['collection'] = view;
 
       // Cambiamos a esta vista
       this.toggleView('collection');
     },
 
+    prevFilterParams: {},
+    filterUsers: function (view, params) {
+
+      if (!params) {
+        params = this.prevFilterParams;
+      }
+      else {
+        this.prevFilterParams = params;
+      }
+      usersCollection.remove(usersCollection.models);
+      usersCollection.fetch({data: params});
+    },
+
+    confirmRemoveUser: function (view) {
+
+      // Solicitamos confirmacion
+      Modals.confirm({
+        message: 'Estas seguro de eliminar el usuario "' + view.model.get('name') + ' ' + view.model.get('lastname') + '"?',
+        accept: function () {
+
+          // Destruimos el modelo
+          view.model.destroy({
+            // Si el modelo se elimino con exito
+            success: function () {
+
+              // Avisamos
+              Modals.success({
+                message: 'El usuario fue eliminado con exito!'
+              });
+            },
+            error: function () {
+
+              // @TODO mostrar error
+
+              // Avisamos
+              Modals.error({
+                message: '',
+                close: function () {
+
+                  //@TODO ver si es necesario hacer algo
+                }
+              });
+            }
+          });
+        }
+      });
+    },
+
     // Instancia, si no estuviese previamente creada, y renderiza
-    // la vista UserDetailView
+    // la vista UsersDetailView
     // Si no existiera una pelicula asociada al id, salta al listado
     showDetailView: function (id) {
 
       var success = $.proxy(function (model) {
+        var view = this.views['detail'];
 
-          // Si ua existe
-          if (!!this.views['detail']) {
+        // Si ua existe
+        if (!!view) {
 
-            // Destruimos
-            this.views['detail'].remove();
-          }
+          // Destruimos
+          view.remove();
+        }
 
-          // Instanciamos
-          this.views['detail'] = new UserDetailView({model: model});
+        // Instanciamos
+        view = new UsersDetailView({model: model});
 
-          // Renderizamos
-          $('#main').append(this.views['detail'].render().el);
+        // Renderizamos
+        $('#main').append(view.render().el);
 
-          // Cambiamos a esta vista
-          this.toggleView('detail');
+        //
+        this.views['detail'] = view;
+
+        // Cambiamos a esta vista
+        this.toggleView('detail');
       }, this);
 
       // Validamos que la pelicula exista
@@ -95,35 +152,36 @@ function ($, _, Backbone, Modals, UserCollection, UserColllectionView,
     },
 
     // Instancia, si no estuviese previamente creada, y renderiza
-    // la vista UserFormView
+    // la vista UsersFormView
     // Si no existiera una pelicula asociada al id, salta al listado
     showFormView: function (id) {
 
       var success = $.proxy(function (model) {
+        var view = this.views['form'];
 
         // Si esta
-        if (!!this.views['form']) {
+        if (!!view) {
 
           // Destruimos
-          this.views['form'].remove();
+          view.remove();
         }
 
         if (!model){
-          model = new UserCollection.model({});
+          model = new usersCollection.model({});
         }
 
         // Instanciamos
-        this.views['form'] = new UserFormView({
-          collection: UserCollection
+        view = new UsersFormView({
+          collection: usersCollection
           , model: model
         });
-
-        this.views['form'].listenTo(this.views['form'].model,'sync',$.proxy(function(){
-          this.navigate('', {trigger: true});
-        },this));
+        this.listenTo(view, 'saveUser', this.saveUser);
 
         // Renderizamos
-        $('#main').append(this.views['form'].render().el);
+        $('#main').append(view.render().el);
+
+        //
+        this.views['form'] = view;
 
         // Cambiamos a esta vista
         this.toggleView('form');
@@ -140,14 +198,48 @@ function ($, _, Backbone, Modals, UserCollection, UserColllectionView,
       }
     },
 
+    saveUser: function (model, attrs) {
+      var self = this,
+        add = !model.id;
+
+      // Guardamos
+      model.save(attrs, {
+        success: function (model, xhr, opt) {
+
+          // Avisamos
+          Modals.success({
+            message: 'El cliente fue ' + (add? 'cargado' : 'actualizado') + ' con exito!',
+            close: function () {
+
+              self.navigate('users', {trigger: true});
+            }
+          });
+        },
+        error: function (mod, xhr, opt) {
+
+          var msg = 'Ha ocurrido un error.<br />Por favor, recarge pa pagina.';
+
+          //@TODO Ver de centralizar este analisis
+          if (xhr.status === 409) {
+            msg = 'El registro ya ha sido actualizada por otro usuario.<br />Actualice la p&aacute;gina para ver los nuevos datos.';
+          }
+
+          // 
+          Modals.error({
+            message: msg
+          });
+        }
+      });
+    },
+
     //
     validateUser: function (id, callback) {
       
-      var model = new UserCollection.model({_id: id}),
-        error = $.proxy(function () {
+      var model = new usersCollection.model({_id: id}),
+        error = _.bind(function () {
           
           // Mostramos el listado
-          this.navigate('', {trigger: true});
+          this.navigate('users', {trigger: true});
         }, this);
 
 
@@ -165,13 +257,5 @@ function ($, _, Backbone, Modals, UserCollection, UserColllectionView,
     }
   });
 
-  var User = {
-    initialize: function () {
-      
-      // Instanciamos
-      var UserRouter = new UserRouter();
-    }
-  };
-
-  return User;
+  return UsersRouter;
 });

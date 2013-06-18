@@ -12,17 +12,15 @@ define([
     
     //
     events: {
-      'click button.remove': 'removeUser'
+      'click button.remove': 'removeModel'
     },
 
     //
     initialize: function () {
-
-      _.bindAll(this, ['modelUpdated', 'modelDestroyed']);
       
       // Agregamos listeners
-      this.listenTo(this.model, 'change', this.modelUpdated);
-      this.listenTo(this.model, 'destroy', this.modelDestroyed);
+      this.listenTo(this.model, 'all', function () { console.log('item', arguments); });
+      this.listenTo(this.model, 'remove', _.bind(this.modelDestroyed, this));
     },
 
     // Guardamos el template compilado para reutilizar
@@ -47,9 +45,9 @@ define([
     },
 
     // Avisa que se quiere eliminar
-    removeUser: function() {
+    removeModel: function() {
 
-      this.trigger('removeUser', this);
+      this.trigger('removeModel', this);
     }
   });
 

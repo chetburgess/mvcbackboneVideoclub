@@ -3,6 +3,6 @@
   <dt>E-mail</dt>
   <dd><a href="mailto:<%= model.get('email') %>"><%= model.get('email') %></a></dd>
   <dt>Nivel</dt>
-  <dd><%= model.get('level') %></dd>
+  <dd><%= model.get('level') === 'admin'? 'Administrador' : 'Cliente' %></dd>
 </dl>
 <a href="#users" class="btn">Volver a la lista</a>

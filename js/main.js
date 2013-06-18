@@ -10,7 +10,7 @@ require.config({
 });
 
 require([
-	'router',
+	'app',
   'bootstrap',
   'modals'
 ], function(App, bootstrap, Modals) {

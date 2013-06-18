@@ -1,11 +1,11 @@
 define([
   'underscore',
   'backbone',
-  'models/base'
+  'models/baseModel'
 ], function(_, Backbone, BaseModel) {
 
   var User = BaseModel.extend({
-    urlRoot: 'http://socramg.iriscouch.com/videoclub/',
+    urlRoot: 'http://socramg.iriscouch.com/users/',
 
     defaults: {
       name: '',
@@ -43,5 +43,5 @@ define([
     }
   });
 
-  return Movie;
+  return User;
 });

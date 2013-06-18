@@ -37,7 +37,7 @@ define([
       });
 
       //
-      this.trigger('saveUser', {model: this.model, attrs: attrs});
+      this.trigger('saveUser', this.model, attrs);
 
       //
       evt.preventDefault();

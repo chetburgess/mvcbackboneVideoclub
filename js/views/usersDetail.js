@@ -1,7 +1,7 @@
 define([
   'underscore',
   'backbone',
-  'text!/templates/user/detail.html'  
+  'text!/templates/users/detail.html'  
 ], function(_, Backbone, UsersDetailHTML) {
 
 	var UserDetailView = Backbone.View.extend({
