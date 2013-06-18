@@ -52,9 +52,6 @@ define([
 
           // Destruimos el modelo
           self.model.destroy({
-            headers: {
-              'IF-Match': self.model.get('_rev')
-            },
             // Si el modelo se elimino con exito
             success: function () {
 
