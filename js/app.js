@@ -1,11 +1,12 @@
 define([
+  'jquery',
   'underscore',
   'backbone',
   'modals',
   'routers/users',
   'routers/movies',
   'views/index'
-], function (_, Backbone, Modals, UsersRouter, MoviesRouter, IndexView) {
+], function ($, _, Backbone, Modals, UsersRouter, MoviesRouter, IndexView) {
   var app = {
     initialize: function () {
 
@@ -17,21 +18,23 @@ define([
         Modals.loading({show: false});
       });
       
-      var indexRouter = Backbone.Router.extend({
+      var userRouter = new UsersRouter();
+      var movieRouter = new MoviesRouter();
+
+      //
+      var IndexRouter = Backbone.Router.extend({
         routes: {
           '': 'showIndexView'
         },
 
         indexView: null,
-      
-        showIndexView: function(){
+        showIndexView: function () {
     
-          if (!!this.indexView){
-            indexView.$el.removeClass('hide');
-          }
-          else{
-            indexView = new IndexView();
-            $('#main').append(indexView.render().el);  
+          if (!this.indexView) {
+
+            this.indexView = new IndexView();
+            $('#main').append(this.indexView.render().el);
+
             this.listenTo(indexView, 'ocultarIndex', this.ocultarVista);            
           }
        },
@@ -44,10 +47,7 @@ define([
       });
 
       // Instanciamos
-      var router = new indexRouter();
-
-      var userRouter = new UsersRouter();
-      var movieRouter = new MoviesRouter();
+      var router = new IndexRouter();
 
       // Iniciamos
       Backbone.history.start();

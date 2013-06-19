@@ -15,11 +15,13 @@ define([
 	    },
 
 		render: function () {
+			
 			this.$el.html(this.template());
 			return this;
 		},
 
-		hide: function () {
+		hide: function (evt) {
+
 			this.trigger('ocultarIndex', this);
 		}
 

@@ -202,7 +202,7 @@ function ($, _, Backbone, Modals, UsersCollection, UsersColllectionView, UsersFo
         .done( function () {
           // Avisamos
           Modals.success({
-            message: 'El cliente fue ' + (add? 'cargado' : 'actualizado') + ' con exito!',
+            message: 'El usuario fue ' + (add? 'cargado' : 'actualizado') + ' con exito!',
             close: function () {
 
               self.navigate('users', {trigger: true});
