@@ -270,7 +270,12 @@ function ($, _, Backbone, Modals, UsersCollection, UsersColllectionView,
         }, this);
 
 
-
+      $.when(model.fetch())
+        .done(function(response){
+          callback(model);
+        })
+        .fail(error);
+/*
       // Buscamos los datos de la pelicula
       model.fetch({
        success: function (model, resp, options) {
@@ -280,7 +285,7 @@ function ($, _, Backbone, Modals, UsersCollection, UsersColllectionView,
         },
         error: error
       });
-
+*/
     }
   });
 
