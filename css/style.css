@@ -17,8 +17,11 @@ header p span {
   text-decoration: line-through;
 }
 
-table .hide {
+.hide {
     display: none;
+}
+.centrado{
+  text-align: center;
 }
 .loading {
 	height: 20px;

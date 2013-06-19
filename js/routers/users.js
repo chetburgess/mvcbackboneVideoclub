@@ -92,20 +92,13 @@ function ($, _, Backbone, Modals, UsersCollection, UsersColllectionView,
         accept: function () {
 
           // Destruimos el modelo
-          view.model.destroy({
-            // Si el modelo se elimino con exito
-            success: function () {
-
-              // Avisamos
+          $.when(view.model.destroy())
+            .done(function(){
               Modals.success({
                 message: 'El usuario fue eliminado con exito!'
               });
-            },
-            error: function () {
-
-              // @TODO mostrar error
-
-              // Avisamos
+            })
+            .fail(function(){
               Modals.error({
                 message: '',
                 close: function () {
@@ -113,8 +106,7 @@ function ($, _, Backbone, Modals, UsersCollection, UsersColllectionView,
                   //@TODO ver si es necesario hacer algo
                 }
               });
-            }
-          });
+            });
         }
       });
     },

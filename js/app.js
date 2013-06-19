@@ -3,8 +3,9 @@ define([
   'backbone',
   'modals',
   'routers/users',
+  'views/index'
 ],
-function (_, Backbone, Modals, UsersRouter) {
+function (_, Backbone, Modals, UsersRouter, IndexView) {
 
   var app = {
     initialize: function () {
@@ -17,7 +18,35 @@ function (_, Backbone, Modals, UsersRouter) {
         Modals.loading({show: false});
       });
       
+      var indexRouter = Backbone.Router.extend({
+        routes: {
+          '': 'showIndexView'
+        },
+
+        indexView: null,
+      
+        showIndexView: function(){
+    
+          if (!!this.indexView){
+            indexView.$el.addClass('show');
+          }
+          else{
+            indexView = new IndexView();
+            $('#main').append(indexView.render().el);  
+            this.listenTo(indexView, 'ocultarIndex', this.ocultarVista);            
+          }
+       },
+
+        ocultarVista: function(view) {
+          indexView.$el.addClass('hide');
+        }
+
+
+      });
+
       // Instanciamos
+      var router = new indexRouter();
+
       var userRouter = new UsersRouter();
 
       // Iniciamos
