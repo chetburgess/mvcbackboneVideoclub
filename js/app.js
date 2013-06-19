@@ -27,7 +27,7 @@ define([
         showIndexView: function(){
     
           if (!!this.indexView){
-            indexView.$el.addClass('show');
+            indexView.$el.removeClass('hide');
           }
           else{
             indexView = new IndexView();
