@@ -1,10 +1,8 @@
 define([
-  'jquery',
   'underscore',
   'backbone',
-  'modals',
   'text!/templates/movies/form.html'
-], function($, _, Backbone, Modals, MoviesFormHTML) {
+], function(_, Backbone, MoviesFormHTML) {
   
   // MoviesFormView es un clase que representa la vista de
   // la pelicula completa del listado de peliculas
@@ -16,7 +14,7 @@ define([
     //
     events: {
       'submit .movie-form': 'saveMovie',
-      'change .poster': 'posterSelected'
+      'change .poster': 'uploadPoster'
     },
 
     // Guardamos el template compilado para reutilizar
@@ -30,8 +28,7 @@ define([
     // Guardamos los cambios en el modelo
     saveMovie: function (evt) {
       
-      var attrs = {},
-        add = !this.model.id; // si no esta seteado el id, es porque es una pelicula nueva
+      var attrs = {};
 
       // Buscamos los inputs y obtenemos el valor
       $(evt.target).find(':input').not('button').each(function () {
@@ -39,40 +36,16 @@ define([
         var el = $(this);
         attrs[el.attr('name')] = el.val();
       });
-      attrs.rating = Number(attrs.rating);
-      attrs.year = Number(attrs.year);
 
-      // Guardamos
-      this.model.save(attrs, {
-        success: function (model, xhr, opt) {
+      //
+      this.trigger('saveMovie', this.model, attrs);
 
-          // Avisamos
-          Modals.success({
-            message: 'La pelicula fue ' + (add? 'cargada' : 'actualizada') + ' con exito!'
-          });
-        },
-        error: function (mod, xhr, opt) {
-
-          var msg = 'Ha ocurrido un error.<br />Por favor, recarge pa pagina.';
-
-          //@TODO Ver de centralizar este analisis
-          if (xhr.status === 409) {
-            msg = 'La pelicula ya ha sido actualizada por otro usuario.<br />Actualice la p&aacute;gina para ver los nuevos datos.';
-          }
-
-          // 
-          Modals.error({
-            message: msg
-          });
-        }
-      });
-
+      //
       evt.preventDefault();
-
       return false; // Evitamos que se recarge la pagina
     },
 
-    posterSelected: function (evt) {
+    uploadPoster: function (evt) {
       var files = evt.target.files, // FileList object
         file = files[0],
         reader;

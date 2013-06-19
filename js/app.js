@@ -3,8 +3,9 @@ define([
   'backbone',
   'modals',
   'routers/users',
+  'routers/movies'
 ],
-function (_, Backbone, Modals, UsersRouter) {
+function (_, Backbone, Modals, UsersRouter, MoviesRouter) {
 
   var app = {
     initialize: function () {
@@ -19,6 +20,7 @@ function (_, Backbone, Modals, UsersRouter) {
       
       // Instanciamos
       var userRouter = new UsersRouter();
+      var movieRouter = new MoviesRouter();
 
       // Iniciamos
       Backbone.history.start();

@@ -3,22 +3,21 @@ define([
   'underscore',
   'backbone',
   'modals',
-  'collections/movie',
-  'views/movieCollection',
-  'views/movieForm',
-  'views/movie'
+  'collections/movies',
+  'views/moviesCollection',
+  'views/moviesForm',
+  'views/moviesDetail'
 ],
-function ($, _, Backbone, Modals, MovieCollection, MovieColllectionView, MovieFormView, MovieDetailView) {
+function ($, _, Backbone, Modals, MoviesCollection, MoviesColllectionView, MoviesFormView, MoviesDetailView) {
 
   //
-  var movieCollection = new MovieCollection([]);
+  var collection = new MoviesCollection([]);
 
-  // MovieRouter, es una clase que mapea la URL para convertirlas en acciones
+  // MoviesRouter, es una clase que mapea la URL para convertirlas en acciones
   // y dispara eventos cuando "coincide"
-  var MovieRouter = Backbone.Router.extend({
+  var MoviesRouter = Backbone.Router.extend({
     routes: {
-      // Las acciones no agregan "Movie", por que el rotuer es "Movie"
-      '': 'showCollectionView',
+      'movies': 'showCollectionView',
       'movies/detail/:id': 'showDetailView',
       'movies/new': 'showFormView',
       'movies/edit/:id': 'showFormView'
@@ -49,81 +48,142 @@ function ($, _, Backbone, Modals, MovieCollection, MovieColllectionView, MovieFo
     // Instancia, si no estuviese previamente creada, y renderiza
     // la vista MovieColllectioView
     showCollectionView: function () {
+      var view = this.views['collection'];
+
       // Si no esta
-      if (!this.views['collection']) {
+      if (!view) {
 
         // Instanciamos
-        this.views['collection'] = new MovieColllectionView({collection: movieCollection});
+        view = new MoviesColllectionView({collection: collection});
+        this.listenTo(view, 'filterItems', this.filter);
+        this.listenTo(view, 'removeMovie', this.confirmRemove);
 
         // Renderizamos
-        $('#main').append(this.views['collection'].render().el);
+        $('#main').append(view.render().el);
       }
 
       //
-      this.views['collection'].doFetch();
+      this.filter();
+
+      //
+      this.views['collection'] = view;
 
       // Cambiamos a esta vista
       this.toggleView('collection');
     },
 
+    prevFilterParams: {},
+    filter: function (view, params) {
+
+      if (!params) {
+        params = this.prevFilterParams;
+      }
+      else {
+        this.prevFilterParams = params;
+      }
+      collection.remove(collection.models);
+      collection.fetch({data: params});
+    },
+
+    confirmRemove: function (view) {
+
+      // Solicitamos confirmacion
+      Modals.confirm({
+        message: 'Estas seguro de eliminar la pelicula "' + view.model.get('title') + '"?',
+        accept: function () {
+
+          // Destruimos el modelo
+          view.model.destroy({
+            // Si el modelo se elimino con exito
+            success: function () {
+
+              // Avisamos
+              Modals.success({
+                message: 'La pelicula fue eliminada con exito!'
+              });
+            },
+            error: function () {
+
+              // @TODO mostrar error
+
+              // Avisamos
+              Modals.error({
+                message: '',
+                close: function () {
+
+                  //@TODO ver si es necesario hacer algo
+                }
+              });
+            }
+          });
+        }
+      });
+    },
+
     // Instancia, si no estuviese previamente creada, y renderiza
-    // la vista MovieDetailView
+    // la vista MoviesDetailView
     // Si no existiera una pelicula asociada al id, salta al listado
     showDetailView: function (id) {
 
       var success = $.proxy(function (model) {
+        var view = this.views['detail'];
 
-          // Si ua existe
-          if (!!this.views['detail']) {
+        // Si ua existe
+        if (!!view) {
 
-            // Destruimos
-            this.views['detail'].remove();
-          }
+          // Destruimos
+          view.remove();
+        }
 
-          // Instanciamos
-          this.views['detail'] = new MovieDetailView({model: model});
+        // Instanciamos
+        view = new MoviesDetailView({model: model});
 
-          // Renderizamos
-          $('#main').append(this.views['detail'].render().el);
+        // Renderizamos
+        $('#main').append(view.render().el);
 
-          // Cambiamos a esta vista
-          this.toggleView('detail');
+        //
+        this.views['detail'] = view;
+
+        // Cambiamos a esta vista
+        this.toggleView('detail');
       }, this);
 
       // Validamos que la pelicula exista
-      this.validateMovie(id, success);
+      this.validate(id)
+        .done(success);
     },
 
     // Instancia, si no estuviese previamente creada, y renderiza
-    // la vista MovieFormView
+    // la vista MoviesFormView
     // Si no existiera una pelicula asociada al id, salta al listado
     showFormView: function (id) {
 
       var success = $.proxy(function (model) {
+        var view = this.views['form'];
 
         // Si esta
-        if (!!this.views['form']) {
+        if (!!view) {
 
           // Destruimos
-          this.views['form'].remove();
+          view.remove();
         }
 
         if (!model){
-          model = new movieCollection.model({});
+          model = new collection.model({});
         }
 
         // Instanciamos
-        this.views['form'] = new MovieFormView({
-          collection: movieCollection
+        view = new MoviesFormView({
+          collection: collection
           , model: model
         });
-
-        this.views['form'].listenTo(this.views['form'].model,'sync',$.proxy(function(){
-          this.navigate('', {trigger: true});
-        },this));
+        this.listenTo(view, 'saveMovie', this.save);
 
         // Renderizamos
-        $('#main').append(this.views['form'].render().el);
+        $('#main').append(view.render().el);
+
+        //
+        this.views['form'] = view;
 
         // Cambiamos a esta vista
         this.toggleView('form');
@@ -133,56 +193,68 @@ function ($, _, Backbone, Modals, MovieCollection, MovieColllectionView, MovieFo
       if (!!id) {
 
         // Validamos que la pelicula exista
-        this.validateMovie(id, success);
+        this.validate(id)
+          .done(success);
       }
       else {
         success(false);
       }
     },
 
+    save: function (model, attrs) {
+      var self = this,
+        add = !model.id;
+
+      // Guardamos
+      model.save(attrs)
+        .done( function () {
+          // Avisamos
+          Modals.success({
+            message: 'la pelicula fue ' + (add? 'cargada' : 'actualizada') + ' con exito!',
+            close: function () {
+
+              self.navigate('movies', {trigger: true});
+            }
+          });
+        })
+        .fail( function (response) {
+          var msg = 'Ha ocurrido un error.<br />Por favor, recarge pa pagina.';
+
+          //@TODO Ver de centralizar este analisis
+          if (xhr.status === 409) {
+            msg = 'El registro ya ha sido actualizada por otro usuario.<br />Actualice la p&aacute;gina para ver los nuevos datos.';
+          }
+
+          // 
+          Modals.error({
+            message: msg
+          });
+        });
+    },
+
     //
-    validateMovie: function (id, callback) {
+    validate: function (id) {
       
-      var model = new movieCollection.model({_id: id}),
-        error = $.proxy(function () {
+      var model = new collection.model({_id: id}),
+        dfd = jQuery.Deferred();
+
+      $.when(model.fetch())
+        .done( function (response) {
+
+          //
+          dfd.resolve(model);
+        })
+        .fail(_.bind(function () {
           
+          dfd.reject(model);
+
           // Mostramos el listado
-          this.navigate('', {trigger: true});
-        }, this);
+          this.navigate('movies', {trigger: true});
+        }, this));
 
-
-
-      // Buscamos los datos de la pelicula
-      model.fetch({
-       success: function (model, resp, options) {
-          model.once('sync', function(model){
-            callback(model);
-          },this);        
-        },
-        error: error
-      });
-
+      return dfd.promise();
     }
   });
 
-  var app = {
-    initialize: function () {
-
-      //
-      $(document).on('ajaxSend', function () {
-        Modals.loading({show: true});
-      });
-      $(document).on('ajaxComplete', function () {
-        Modals.loading({show: false});
-      });
-      
-      // Instanciamos
-      var movieRouter = new MovieRouter();
-
-      // Iniciamos
-      Backbone.history.start();
-    }
-  };
-
-  return app;
+  return MoviesRouter;
 });

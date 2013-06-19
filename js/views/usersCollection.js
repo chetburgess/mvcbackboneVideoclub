@@ -72,7 +72,7 @@ define([
       var params = {
       	page: 1,
         level: this.$el.find('.level').val(),
-        title: this.$el.find('.search').val()
+        name: this.$el.find('.search').val()
       };
 
       if (!isNaN(page) && page > 0) {

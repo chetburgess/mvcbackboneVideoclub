@@ -1,9 +1,8 @@
 define([
   'underscore',
   'backbone',
-  'modals',
   'text!/templates/movies/collectionItem.html',
-], function(_, Backbone, Modals, MoviesCollectionItemHTML) {
+], function(_, Backbone, MoviesCollectionItemHTML) {
   
   // MoviesCollectionItemView es un clase que representa la vista de
   // la pelicula en la grilla (<tr>...</tr>)
@@ -13,16 +12,15 @@ define([
     
     //
     events: {
-      'click button.remove': 'removeMovie'
+      'click button.remove': 'removeModel'
     },
 
     //
     initialize: function () {
       
-      // @NOTE El model se adjunta automaticamente
       // Agregamos listeners
-      this.model.on('change', this.updateMove, this);
-      this.model.on('remove', this.updateMove, this);
+      this.listenTo(this.model, 'all', function () { console.log('item', arguments); });
+      this.listenTo(this.model, 'remove', _.bind(this.modelDestroyed, this));
     },
 
     // Guardamos el template compilado para reutilizar
@@ -31,57 +29,25 @@ define([
       
       this.$el.html(this.template({model: this.model}));
       return this;
-
     },
 
     //
-    updateMove: function () {
+    modelUpdated: function () {
 
-    	this.$el.html(this.template({model: this.model}));
+      this.$el.html(this.template({model: this.model}));
     },
 
-    // Eliminar la pelicula
-    removeMovie: function() {
-      var self = this;
+    //
+    modelDestroyed: function () {
 
-      // Solicitamos confirmacion
-      Modals.confirm({
-        message: 'Estas seguro que no vas a ver mas la pelicula "' + this.model.get('title') + '"?',
-        accept: function () {
+      this.remove();
+      this.trigger('viewRemoved', this);
+    },
 
-          // Destruimos el modelo
-          self.model.destroy({
-            // Si el modelo se elimino con exito
-            success: function () {
+    // Avisa que se quiere eliminar
+    removeModel: function() {
 
-              // Eliminamos la vista
-              self.remove();
-
-              // Avisamos
-              Modals.success({
-                message: 'La pelicula fue eliminada con exito!',
-                close: function () {
-
-                  //@TODO ver si es necesario hacer algo
-                }
-              });
-            },
-            error: function () {
-
-              // @TODO mostrar error
-
-              // Avisamos
-              Modals.error({
-                message: '',
-                close: function () {
-
-                  //@TODO ver si es necesario hacer algo
-                }
-              });
-            }
-          });
-        }
-      });
+      this.trigger('removeModel', this);
     }
   });
 

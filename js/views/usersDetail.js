@@ -4,7 +4,7 @@ define([
   'text!/templates/users/detail.html'  
 ], function(_, Backbone, UsersDetailHTML) {
 
-	var UserDetailView = Backbone.View.extend({
+	var UsersDetailView = Backbone.View.extend({
 		tagName: 'div',
 		className: 'span12',
 
@@ -18,5 +18,5 @@ define([
 		}
 	});
 
-	return UserDetailView;	
+	return UsersDetailView;	
 });

@@ -15,79 +15,49 @@ define([
 
     //
     events: {
-      'change .genre': 'filterItems',
-      'click .doSearch': 'filterItems',
+      'change .genre': 'doSearch',
+      'click .doSearch': 'doSearch',
       'keypress .search': 'matchEnter'
     },
 
     //
     initialize: function () {
 
-      // @NOTE la collection se adjunta automaticamente
       // Agregamos listeners
-      this.collection.on('sync', this.loadColletionComponent, this);
-      this.paginationView = new PaginationView({
-        collection: this.collection,
-        getFilterParams: $.proxy(this,'getFilterParams')
-      });
+      this.listenTo(this.collection, 'sync', _.bind(this.renderCollection, this));
+
+      //
+      this.paginationView = new PaginationView({collection: this.collection});
+      this.listenTo(this.paginationView, 'changePage', _.bind(this.filterItems, this));
     },
 
     //
     render: function () {
       
       this.$el.html(MoviesCollectionHTML);
+      this.$el.find('.pagination-container').append(this.paginationView.render().el);
 
       return this;
     },
-    doFetch: function () {
-
-      this.collection.fetch({
-        //dataType: 'jsonp',
-        data: this.getFilterParams(),
-        error: function () {
-
-          // Avisamos
-          Modals.error({
-            message: 'El servidor no responde aguarda unos segundos e intenta nuevamente',
-            close: function () {
-
-              //@TODO ver si es necesario hacer algo
-            }
-          });
-        }
-      });
-    },
-
-    // Hash para referenciar la vista de un modelo puntual
-    itemsViews: {},
 
     // Agrega una pelicula a la grilla
     addMovie: function (model) {
 
       var itemView = new MoviesCollectionItemView({model: model});
-      this.$el.find('.list-container').append(itemView.render().el);
+      this.listenTo(itemView, 'removeModel', _.bind(this.removeMovie, this));
 
-      // Guardamos un la view del modelo
-      this.itemsViews[model.id] = itemView;
+      //
+      this.$el.find('.list-container').append(itemView.render().el);
     },
 
-    // Muestra/Oculta la view de una pelicula en la grilla
-    displayItemView: function (itemView, show) {
+    removeMovie: function (view) {
 
-      itemView.$el[show? 'removeClass' : 'addClass']('hide');
+      this.trigger('removeMovie', view);
     },
 
     // Cuando se reset-ea la collection, recargamos todas las peliculas
-    showMovies: function () {
-      var id;
+    renderCollection: function () {
       
-      // Eliminamos todas las vistas de los modelos
-      for (id in this.itemsViews) {
-
-        this.itemsViews[id].remove();
-        delete this.itemsViews[id];
-      }
-
       // Vemos cuales son las peliculas en la collection
       _.each(this.collection.models, function (model) {
 
@@ -95,28 +65,8 @@ define([
           this.addMovie(model);
       }, this);
 
-      // Creamos las opciones del select
+      //
       this.setGenreFilter();
-    },
-
-    //
-    loadColletionComponent: function () {
-      this.showPagination();
-      this.showMovies();
-    },
-
-    //
-    showPagination: function () {
-      
-      this.$el.find('.pagination-container').append(this.paginationView.render().el);
-    },
-
-    //
-    getFilterParams: function () {
-      return {
-        'genre': this.selectedGenre = this.$el.find('.genre').val(),
-        'title': this.$el.find('.search').val()
-      }
     },
 
     // Genero seleccionado
@@ -158,22 +108,35 @@ define([
     },
 
     //
-    filterItems: function() {
+    filterItems: function (page) {
 
-      //
-      this.collection.pageNumber = 1;
+      var params = {
+        page: 1,
+        genre: this.selectedGenre = this.$el.find('.genre').val(),
+        title: this.$el.find('.search').val()
+      };
 
-      //
-      this.doFetch();
+      if (!isNaN(page) && page > 0) {
 
+        params.page = page;
+      }
+
+      this.trigger('filterItems', this, params);
       return false;
+    },
+
+    //
+    doSearch: function () {
+
+      this.filterItems(1);
     },
 
     // Si 
     matchEnter: function (evt) {
 
       if (evt.keyCode === 13) {
-        this.filterItems();
+
+        this.doSearch();
       }
     }
   });

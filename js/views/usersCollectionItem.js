@@ -4,9 +4,9 @@ define([
   'text!/templates/users/collectionItem.html',
 ], function(_, Backbone, UsersCollectionItemHTML) {
   
-  // UserCollectionItemView es un clase que representa la vista del
+  // UsersCollectionItemView es un clase que representa la vista del
   // usuario en la grilla (<tr>...</tr>)
-  var UserCollectionItemView = Backbone.View.extend({
+  var UsersCollectionItemView = Backbone.View.extend({
     //
     tagName: 'tr',
     
@@ -51,5 +51,5 @@ define([
     }
   });
 
-  return UserCollectionItemView;
+  return UsersCollectionItemView;
 });
