@@ -203,6 +203,31 @@ function ($, _, Backbone, Modals, UsersCollection, UsersColllectionView,
         add = !model.id;
 
       // Guardamos
+      model.save(attrs)
+        .done(function(){
+          // Avisamos
+          Modals.success({
+            message: 'El cliente fue ' + (add? 'cargado' : 'actualizado') + ' con exito!',
+            close: function () {
+
+              self.navigate('users', {trigger: true});
+            }
+          });
+        })
+        .fail(function(response){
+          var msg = 'Ha ocurrido un error.<br />Por favor, recarge pa pagina.';
+
+          //@TODO Ver de centralizar este analisis
+          if (xhr.status === 409) {
+            msg = 'El registro ya ha sido actualizada por otro usuario.<br />Actualice la p&aacute;gina para ver los nuevos datos.';
+          }
+
+          // 
+          Modals.error({
+            message: msg
+          });
+        });
+/*
       model.save(attrs, {
         success: function (model, xhr, opt) {
 
@@ -228,8 +253,10 @@ function ($, _, Backbone, Modals, UsersCollection, UsersColllectionView,
           Modals.error({
             message: msg
           });
+       
         }
       });
+*/         
     },
 
     //
