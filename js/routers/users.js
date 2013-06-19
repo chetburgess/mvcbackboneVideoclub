@@ -202,6 +202,31 @@ function ($, _, Backbone, Modals, UsersCollection, UsersColllectionView, UsersFo
         add = !model.id;
 
       // Guardamos
+      model.save(attrs)
+        .done(function(){
+          // Avisamos
+          Modals.success({
+            message: 'El cliente fue ' + (add? 'cargado' : 'actualizado') + ' con exito!',
+            close: function () {
+
+              self.navigate('users', {trigger: true});
+            }
+          });
+        })
+        .fail(function(response){
+          var msg = 'Ha ocurrido un error.<br />Por favor, recarge pa pagina.';
+
+          //@TODO Ver de centralizar este analisis
+          if (xhr.status === 409) {
+            msg = 'El registro ya ha sido actualizada por otro usuario.<br />Actualice la p&aacute;gina para ver los nuevos datos.';
+          }
+
+          // 
+          Modals.error({
+            message: msg
+          });
+        });
+/*
       model.save(attrs, {
         success: function (model, xhr, opt) {
 
@@ -227,8 +252,10 @@ function ($, _, Backbone, Modals, UsersCollection, UsersColllectionView, UsersFo
           Modals.error({
             message: msg
           });
+       
         }
       });
+*/         
     },
 
     //
@@ -242,7 +269,12 @@ function ($, _, Backbone, Modals, UsersCollection, UsersColllectionView, UsersFo
         }, this);
 
 
-
+      $.when(model.fetch())
+        .done(function(response){
+          callback(model);
+        })
+        .fail(error);
+/*
       // Buscamos los datos de la pelicula
       model.fetch({
        success: function (model, resp, options) {
@@ -252,7 +284,7 @@ function ($, _, Backbone, Modals, UsersCollection, UsersColllectionView, UsersFo
         },
         error: error
       });
-
+*/
     }
   });
 
