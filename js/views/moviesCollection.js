@@ -1,20 +1,17 @@
 define([
-  'jquery',
   'underscore',
   'backbone',
-  'modals',
-  'text!/templates/movie/movieCollection.html',
-  'views/movieCollectionItem',
+  'text!/templates/movies/collection.html',
+  'views/moviesCollectionItem',
   'views/paginatorView'
-], function($, _, Backbone, Modals, MovieCollectionHTML, MovieCollectionItemView, PaginationView) {
+], function(_, Backbone, MoviesCollectionHTML, MoviesCollectionItemView, PaginationView) {
   
   // MovieCollectionView es un clase que representa la vista de
   // la pelicula completa del listado de peliculas
-  var MovieCollectionView = Backbone.View.extend({
+  var MoviesCollectionView = Backbone.View.extend({
     // Idicamos que queremos se cree dentro de un div
     tagName: 'div',
     className: 'span12 hide',
-    itemListSelector: '.list-container',
 
     //
     events: {
@@ -38,7 +35,7 @@ define([
     //
     render: function () {
       
-      this.$el.html(MovieCollectionHTML);
+      this.$el.html(MoviesCollectionHTML);
 
       return this;
     },
@@ -67,8 +64,8 @@ define([
     // Agrega una pelicula a la grilla
     addMovie: function (model) {
 
-      var itemView = new MovieCollectionItemView({model: model});
-      this.$el.find(this.itemListSelector).append(itemView.render().el);
+      var itemView = new MoviesCollectionItemView({model: model});
+      this.$el.find('.list-container').append(itemView.render().el);
 
       // Guardamos un la view del modelo
       this.itemsViews[model.id] = itemView;
@@ -181,5 +178,5 @@ define([
     }
   });
 
-  return MovieCollectionView;
+  return MoviesCollectionView;
 });

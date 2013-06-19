@@ -1,10 +1,8 @@
 define([
-  'jquery',
-  'underscore',
   'backbone',
   'collections/base',
   'models/movie'
-], function($, _, Backbone, BaseCollection, MovieModel) {
+], function(Backbone, BaseCollection, MovieModel) {
   
   // MovieCollection, es una clase que que agrupa/ordena/pagina/etc modelos del mismo tipo
   var MovieCollection = BaseCollection.extend({

@@ -1,12 +1,11 @@
 define([
-  'underscore',
   'backbone'
-], function(_, Backbone) {
+], function(Backbone) {
 
   var BaseModel = Backbone.Model.extend({
-    urlRoot: 'http://socramg.iriscouch.com/videoclub/',
 
     idAttribute: '_id',
+    
     destroy: function (options) {
 
       var options = options || {};

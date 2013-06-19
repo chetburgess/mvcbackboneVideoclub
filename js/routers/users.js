@@ -8,8 +8,7 @@ define([
   'views/usersForm',
   'views/usersDetail'
 ],
-function ($, _, Backbone, Modals, UsersCollection, UsersColllectionView,
-          UsersFormView, UsersDetailView) {
+function ($, _, Backbone, Modals, UsersCollection, UsersColllectionView, UsersFormView, UsersDetailView) {
 
   //
   var usersCollection = new UsersCollection([]);

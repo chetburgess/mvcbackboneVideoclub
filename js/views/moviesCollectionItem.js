@@ -1,14 +1,13 @@
 define([
-  'jquery',
   'underscore',
   'backbone',
   'modals',
-  'text!/templates/movie/movieCollectionItem.html',
-], function($, _, Backbone, Modals, MovieCollectionItemHTML) {
+  'text!/templates/movies/collectionItem.html',
+], function(_, Backbone, Modals, MoviesCollectionItemHTML) {
   
-  // MovieCollectionItemView es un clase que representa la vista de
+  // MoviesCollectionItemView es un clase que representa la vista de
   // la pelicula en la grilla (<tr>...</tr>)
-  var MovieCollectionItemView = Backbone.View.extend({
+  var MoviesCollectionItemView = Backbone.View.extend({
     //
     tagName: 'tr',
     
@@ -27,7 +26,7 @@ define([
     },
 
     // Guardamos el template compilado para reutilizar
-    template: _.template(MovieCollectionItemHTML),
+    template: _.template(MoviesCollectionItemHTML),
     render: function () {
       
       this.$el.html(this.template({model: this.model}));
@@ -86,5 +85,5 @@ define([
     }
   });
 
-  return MovieCollectionItemView;
+  return MoviesCollectionItemView;
 });

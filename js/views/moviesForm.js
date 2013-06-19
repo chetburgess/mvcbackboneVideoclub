@@ -3,12 +3,12 @@ define([
   'underscore',
   'backbone',
   'modals',
-  'text!/templates/movie/movieForm.html'
-], function($, _, Backbone, Modals, MovieFormHTML) {
+  'text!/templates/movies/form.html'
+], function($, _, Backbone, Modals, MoviesFormHTML) {
   
-  // MovieFormView es un clase que representa la vista de
+  // MoviesFormView es un clase que representa la vista de
   // la pelicula completa del listado de peliculas
-  var MovieFormView = Backbone.View.extend({
+  var MoviesFormView = Backbone.View.extend({
     // Idicamos que queremos se cree dentro de un div
     tagName: 'div',
     className: 'span12',
@@ -20,7 +20,7 @@ define([
     },
 
     // Guardamos el template compilado para reutilizar
-    template: _.template(MovieFormHTML),
+    template: _.template(MoviesFormHTML),
     render: function () {
       
       this.$el.html(this.template({model: this.model}));
@@ -132,5 +132,5 @@ define([
     }
   });
 
-  return MovieFormView;
+  return MoviesFormView;
 });

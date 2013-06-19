@@ -8,8 +8,7 @@ define([
   'views/movieForm',
   'views/movie'
 ],
-function ($, _, Backbone, Modals, MovieCollection, MovieColllectionView,
-          MovieFormView, MovieDetailView) {
+function ($, _, Backbone, Modals, MovieCollection, MovieColllectionView, MovieFormView, MovieDetailView) {
 
   //
   var movieCollection = new MovieCollection([]);
