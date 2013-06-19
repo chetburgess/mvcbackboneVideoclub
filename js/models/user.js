@@ -1,8 +1,7 @@
 define([
-  'underscore',
   'backbone',
-  'models/baseModel'
-], function(_, Backbone, BaseModel) {
+  'models/base'
+], function(Backbone, BaseModel) {
 
   var User = BaseModel.extend({
     urlRoot: 'http://socramg.iriscouch.com/users/',

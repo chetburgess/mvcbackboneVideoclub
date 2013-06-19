@@ -1,12 +1,10 @@
 define([
-  'underscore',
   'backbone',
-  'models/baseModel'
-], function(_, Backbone, BaseModel) {
+  'models/base'
+], function(Backbone, BaseModel) {
 
   var Movie = BaseModel.extend({
-
-    idAttribute: '_id',
+    urlRoot: 'http://socramg.iriscouch.com/videoclub/',
     
     defaults: {
       title: '',

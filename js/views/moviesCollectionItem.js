@@ -1,12 +1,12 @@
 define([
   'underscore',
   'backbone',
-  'text!/templates/users/collectionItem.html',
-], function(_, Backbone, UsersCollectionItemHTML) {
+  'text!/templates/movies/collectionItem.html',
+], function(_, Backbone, MoviesCollectionItemHTML) {
   
-  // UsersCollectionItemView es un clase que representa la vista del
-  // usuario en la grilla (<tr>...</tr>)
-  var UsersCollectionItemView = Backbone.View.extend({
+  // MoviesCollectionItemView es un clase que representa la vista de
+  // la pelicula en la grilla (<tr>...</tr>)
+  var MoviesCollectionItemView = Backbone.View.extend({
     //
     tagName: 'tr',
     
@@ -24,7 +24,7 @@ define([
     },
 
     // Guardamos el template compilado para reutilizar
-    template: _.template(UsersCollectionItemHTML),
+    template: _.template(MoviesCollectionItemHTML),
     render: function () {
       
       this.$el.html(this.template({model: this.model}));
@@ -34,7 +34,7 @@ define([
     //
     modelUpdated: function () {
 
-    	this.$el.html(this.template({model: this.model}));
+      this.$el.html(this.template({model: this.model}));
     },
 
     //
@@ -51,5 +51,5 @@ define([
     }
   });
 
-  return UsersCollectionItemView;
+  return MoviesCollectionItemView;
 });

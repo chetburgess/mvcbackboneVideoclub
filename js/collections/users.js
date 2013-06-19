@@ -1,9 +1,8 @@
 define([
-  'underscore',
   'backbone',
   'collections/base',
   'models/user'
-], function(_, Backbone, BaseCollection, UserModel) {
+], function(Backbone, BaseCollection, UserModel) {
   
   // UserCollection, es una clase que que agrupa/ordena/pagina/etc modelos del mismo tipo
   var UserCollection = BaseCollection.extend({

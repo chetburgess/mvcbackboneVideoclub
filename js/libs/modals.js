@@ -44,7 +44,7 @@
 		});
 
 		//
-		div.modal();
+		div.modal({backdrop: 'static'});
 	};
 
 	// Despiega una ventana estilo error

@@ -3,24 +3,24 @@ define([
   'underscore',
   'backbone',
   'modals',
-  'collections/users',
-  'views/usersCollection',
-  'views/usersForm',
-  'views/usersDetail'
+  'collections/movies',
+  'views/moviesCollection',
+  'views/moviesForm',
+  'views/moviesDetail'
 ],
-function ($, _, Backbone, Modals, UsersCollection, UsersColllectionView, UsersFormView, UsersDetailView) {
+function ($, _, Backbone, Modals, MoviesCollection, MoviesColllectionView, MoviesFormView, MoviesDetailView) {
 
   //
-  var collection = new UsersCollection([]);
+  var collection = new MoviesCollection([]);
 
-  // UsersRouter, es una clase que mapea la URL para convertirlas en acciones
+  // MoviesRouter, es una clase que mapea la URL para convertirlas en acciones
   // y dispara eventos cuando "coincide"
-  var UsersRouter = Backbone.Router.extend({
+  var MoviesRouter = Backbone.Router.extend({
     routes: {
-      'users': 'showCollectionView',
-      'users/detail/:id': 'showDetailView',
-      'users/new': 'showFormView',
-      'users/edit/:id': 'showFormView'
+      'movies': 'showCollectionView',
+      'movies/detail/:id': 'showDetailView',
+      'movies/new': 'showFormView',
+      'movies/edit/:id': 'showFormView'
     },
 
     // Referencia para la vista actual
@@ -46,7 +46,7 @@ function ($, _, Backbone, Modals, UsersCollection, UsersColllectionView, UsersFo
     views: {},
 
     // Instancia, si no estuviese previamente creada, y renderiza
-    // la vista UsersColllectioView
+    // la vista MovieColllectioView
     showCollectionView: function () {
       var view = this.views['collection'];
 
@@ -54,9 +54,9 @@ function ($, _, Backbone, Modals, UsersCollection, UsersColllectionView, UsersFo
       if (!view) {
 
         // Instanciamos
-        view = new UsersColllectionView({collection: collection});
+        view = new MoviesColllectionView({collection: collection});
         this.listenTo(view, 'filterItems', this.filter);
-        this.listenTo(view, 'removeUser', this.confirmRemove);
+        this.listenTo(view, 'removeMovie', this.confirmRemove);
 
         // Renderizamos
         $('#main').append(view.render().el);
@@ -89,17 +89,24 @@ function ($, _, Backbone, Modals, UsersCollection, UsersColllectionView, UsersFo
 
       // Solicitamos confirmacion
       Modals.confirm({
-        message: 'Estas seguro de eliminar el usuario "' + view.model.get('name') + ' ' + view.model.get('lastname') + '"?',
+        message: 'Estas seguro de eliminar la pelicula "' + view.model.get('title') + '"?',
         accept: function () {
 
           // Destruimos el modelo
-          $.when(view.model.destroy())
-            .done(function(){
+          view.model.destroy({
+            // Si el modelo se elimino con exito
+            success: function () {
+
+              // Avisamos
               Modals.success({
-                message: 'El usuario fue eliminado con exito!'
+                message: 'La pelicula fue eliminada con exito!'
               });
-            })
-            .fail(function(){
+            },
+            error: function () {
+
+              // @TODO mostrar error
+
+              // Avisamos
               Modals.error({
                 message: '',
                 close: function () {
@@ -107,17 +114,18 @@ function ($, _, Backbone, Modals, UsersCollection, UsersColllectionView, UsersFo
                   //@TODO ver si es necesario hacer algo
                 }
               });
-            });
+            }
+          });
         }
       });
     },
 
     // Instancia, si no estuviese previamente creada, y renderiza
-    // la vista UsersDetailView
-    // Si no existiera un usuario asociado al id, salta al listado
+    // la vista MoviesDetailView
+    // Si no existiera una pelicula asociada al id, salta al listado
     showDetailView: function (id) {
 
-      var success = _.bind(function (model) {
+      var success = $.proxy(function (model) {
         var view = this.views['detail'];
 
         // Si ua existe
@@ -128,7 +136,7 @@ function ($, _, Backbone, Modals, UsersCollection, UsersColllectionView, UsersFo
         }
 
         // Instanciamos
-        view = new UsersDetailView({model: model});
+        view = new MoviesDetailView({model: model});
 
         // Renderizamos
         $('#main').append(view.render().el);
@@ -140,14 +148,14 @@ function ($, _, Backbone, Modals, UsersCollection, UsersColllectionView, UsersFo
         this.toggleView('detail');
       }, this);
 
-      // Validamos que el usuario exista
+      // Validamos que la pelicula exista
       this.validate(id)
         .done(success);
     },
 
     // Instancia, si no estuviese previamente creada, y renderiza
-    // la vista UsersFormView
-    // Si no existiera un usuario asociado al id, salta al listado
+    // la vista MoviesFormView
+    // Si no existiera una pelicula asociada al id, salta al listado
     showFormView: function (id) {
 
       var success = $.proxy(function (model) {
@@ -165,11 +173,11 @@ function ($, _, Backbone, Modals, UsersCollection, UsersColllectionView, UsersFo
         }
 
         // Instanciamos
-        view = new UsersFormView({
+        view = new MoviesFormView({
           collection: collection
           , model: model
         });
-        this.listenTo(view, 'saveUser', this.save);
+        this.listenTo(view, 'saveMovie', this.save);
 
         // Renderizamos
         $('#main').append(view.render().el);
@@ -184,7 +192,7 @@ function ($, _, Backbone, Modals, UsersCollection, UsersColllectionView, UsersFo
       // Si pasamos un id
       if (!!id) {
 
-        // Validamos que el usuario exista
+        // Validamos que la pelicula exista
         this.validate(id)
           .done(success);
       }
@@ -202,10 +210,10 @@ function ($, _, Backbone, Modals, UsersCollection, UsersColllectionView, UsersFo
         .done( function () {
           // Avisamos
           Modals.success({
-            message: 'El cliente fue ' + (add? 'cargado' : 'actualizado') + ' con exito!',
+            message: 'la pelicula fue ' + (add? 'cargada' : 'actualizada') + ' con exito!',
             close: function () {
 
-              self.navigate('users', {trigger: true});
+              self.navigate('movies', {trigger: true});
             }
           });
         })
@@ -241,12 +249,12 @@ function ($, _, Backbone, Modals, UsersCollection, UsersColllectionView, UsersFo
           dfd.reject(model);
 
           // Mostramos el listado
-          this.navigate('users', {trigger: true});
+          this.navigate('movies', {trigger: true});
         }, this));
 
       return dfd.promise();
     }
   });
 
-  return UsersRouter;
+  return MoviesRouter;
 });
