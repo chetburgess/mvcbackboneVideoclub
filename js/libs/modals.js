@@ -115,7 +115,18 @@
 			divLoading.find('p').html(config.message);
 		}
 
-		divLoading.modal(config.show? 'show' : 'hide');
+		var options;
+		if (config.show){
+			options = {
+				show : 'show',
+				backdrop: 'static'
+			};	
+		}
+		else{
+			options = 'hide';
+		}
+
+		divLoading.modal(options);
 	};
 
 	return Modals;
