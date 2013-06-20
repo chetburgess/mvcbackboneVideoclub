@@ -21,10 +21,24 @@ define([
       var userRouter = new UsersRouter();
       var movieRouter = new MoviesRouter();
 
-      //
       var IndexRouter = Backbone.Router.extend({
         routes: {
           '': 'showIndexView'
+        },
+        routeInstances: {
+          'users': userRouter,
+          'movies': movieRouter
+        },
+        initialize: function() {
+          userRouter.bind('all', $.proxy(this, 'handleRemnantCrudView', ['movies']));
+          movieRouter.bind('all', $.proxy(this, 'handleRemnantCrudView',['users']));
+          this.bind('all', $.proxy(this, 'handleRemnantCrudView',['users', 'movies']));
+        },
+
+        handleRemnantCrudView: function(remnantCrudViews, route, routeAction) {
+          if (route === 'route' && routeAction){
+            this.ocultarVista(remnantCrudViews);
+          }
         },
 
         indexView: null,
@@ -35,12 +49,16 @@ define([
             this.indexView = new IndexView();
             $('#main').append(this.indexView.render().el);
 
-            this.listenTo(indexView, 'ocultarIndex', this.ocultarVista);            
           }
-       },
 
-        ocultarVista: function(view) {
-          indexView.$el.addClass('hide');
+        },
+
+        ocultarVista: function(remnantViews) {
+          _.each(remnantViews, function(remnantView){
+            if (this.routeInstances[remnantView].currentView) {
+              this.routeInstances[remnantView].currentView.$el.addClass('hide');
+            }
+          }, this);
         }
 
 

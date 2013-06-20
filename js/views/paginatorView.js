@@ -14,7 +14,9 @@ define([
     events: {
       'click .go-previous': 'goPreviousPage',
       'click .go-next'    : 'goNextPage',
-      'click .page-number': 'gotoPageNumber'
+      'click .page-number': 'gotoPageNumber',
+      'click .item-list-container .active': 'preventsNavigate',
+      'click .item-list-container .disabled': 'preventsNavigate'
     },
 
     initialize: function () {
@@ -48,20 +50,23 @@ define([
       return false;
     },
     gotoPageNumber: function (evt) {
-      
+      evt.preventDefault();
       this.changePage(Number($(evt.currentTarget).text()));
     },
     goPreviousPage: function (evt) {
-      
+      evt.preventDefault();
       var page = this.collection.pageNumber;
       this.changePage(page--);
       return false;
     },
     goNextPage: function (evt) {
-      
+      evt.preventDefault();
       var page = this.collection.pageNumber;
       this.changePage(page++);
       return false;
+    },
+    preventsNavigate: function(evt) {
+      evt.preventDefault();
     }
   });
 
