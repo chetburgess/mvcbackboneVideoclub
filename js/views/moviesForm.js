@@ -1,8 +1,9 @@
 define([
   'underscore',
   'backbone',
-  'text!/templates/movies/form.html'
-], function(_, Backbone, MoviesFormHTML) {
+  'text!/templates/movies/form.html',
+  'eventHandlers/moviesHandler'
+], function(_, Backbone, MoviesFormHTML, MoviesHandler) {
   
   // MoviesFormView es un clase que representa la vista de
   // la pelicula completa del listado de peliculas
@@ -38,7 +39,7 @@ define([
       });
 
       //
-      this.trigger('saveMovie', this.model, attrs);
+      MoviesHandler.trigger('moviesFormView:save', this.model, attrs);
 
       //
       evt.preventDefault();

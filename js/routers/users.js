@@ -6,9 +6,10 @@ define([
   'collections/users',
   'views/usersCollection',
   'views/usersForm',
-  'views/usersDetail'
+  'views/usersDetail',
+  'eventHandlers/usersHandler'
 ],
-function ($, _, Backbone, Modals, UsersCollection, UsersColllectionView, UsersFormView, UsersDetailView) {
+function ($, _, Backbone, Modals, UsersCollection, UsersColllectionView, UsersFormView, UsersDetailView, UsersHandler) {
 
   //
   var collection = new UsersCollection([]);
@@ -21,6 +22,14 @@ function ($, _, Backbone, Modals, UsersCollection, UsersColllectionView, UsersFo
       'users/detail/:id': 'showDetailView',
       'users/new': 'showFormView',
       'users/edit/:id': 'showFormView'
+    },
+
+    //
+    initialize: function () {
+
+      this.listenTo(UsersHandler, 'usersItemView:confirmRemove', _.bind(this.confirmRemove, this));
+      this.listenTo(UsersHandler, 'usersCollectionView:filter', _.bind(this.filter, this));
+      this.listenTo(UsersHandler, 'usersFormView:save', _.bind(this.save, this));
     },
 
     // Referencia para la vista actual
@@ -55,8 +64,6 @@ function ($, _, Backbone, Modals, UsersCollection, UsersColllectionView, UsersFo
 
         // Instanciamos
         view = new UsersColllectionView({collection: collection});
-        this.listenTo(view, 'filterItems', this.filter);
-        this.listenTo(view, 'removeUser', this.confirmRemove);
 
         // Renderizamos
         $('#main').append(view.render().el);
@@ -169,7 +176,6 @@ function ($, _, Backbone, Modals, UsersCollection, UsersColllectionView, UsersFo
           collection: collection
           , model: model
         });
-        this.listenTo(view, 'saveUser', this.save);
 
         // Renderizamos
         $('#main').append(view.render().el);

@@ -3,8 +3,9 @@ define([
   'backbone',
   'text!/templates/users/collection.html',
   'views/usersCollectionItem',
-  'views/paginatorView'
-], function(_, Backbone, UsersCollectionHTML, UsersCollectionItemView, PaginationView) {
+  'views/paginatorView',
+  'eventHandlers/usersHandler'
+], function(_, Backbone, UsersCollectionHTML, UsersCollectionItemView, PaginationView, UsersHandler) {
   
   // UserCollectionView es un clase que representa la vista de
   // la pelicula completa del listado de peliculas
@@ -44,15 +45,9 @@ define([
     addUser: function (model) {
 
       var itemView = new UsersCollectionItemView({model: model});
-      this.listenTo(itemView, 'removeModel', _.bind(this.removeUser, this));
 
       //
       this.$el.find('.list-container').append(itemView.render().el);
-    },
-
-    removeUser: function (view) {
-
-      this.trigger('removeUser', view);
     },
 
     // Cuando se reset-ea la collection, recargamos todas las peliculas
@@ -80,7 +75,7 @@ define([
       	params.page = page;
       }
 
-      this.trigger('filterItems', this, params);
+      UsersHandler.trigger('usersCollectionView:filter', this, params);
       return false;
     },
 

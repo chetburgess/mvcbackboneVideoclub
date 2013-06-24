@@ -1,7 +1,8 @@
 define([
-  'backbone'
+  'backbone',
+  'underscore'
 ],
-function () {
+function (Backbone, _) {
 
   var MoviesHandler = _.extend({}, Backbone.Events);
   return MoviesHandler;

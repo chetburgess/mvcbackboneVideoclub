@@ -2,7 +2,8 @@ define([
   'underscore',
   'backbone',
   'text!/templates/movies/collectionItem.html',
-], function(_, Backbone, MoviesCollectionItemHTML) {
+  'eventHandlers/moviesHandler'
+], function(_, Backbone, MoviesCollectionItemHTML, MoviesHandler) {
   
   // MoviesCollectionItemView es un clase que representa la vista de
   // la pelicula en la grilla (<tr>...</tr>)
@@ -19,7 +20,6 @@ define([
     initialize: function () {
       
       // Agregamos listeners
-      this.listenTo(this.model, 'all', function () { console.log('item', arguments); });
       this.listenTo(this.model, 'remove', _.bind(this.modelDestroyed, this));
     },
 
@@ -41,13 +41,12 @@ define([
     modelDestroyed: function () {
 
       this.remove();
-      this.trigger('viewRemoved', this);
     },
 
     // Avisa que se quiere eliminar
     removeModel: function() {
 
-      this.trigger('removeModel', this);
+      MoviesHandler.trigger('moviesItemView:confirmRemove', this);
     }
   });
 

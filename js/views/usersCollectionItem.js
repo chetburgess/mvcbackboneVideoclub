@@ -2,7 +2,8 @@ define([
   'underscore',
   'backbone',
   'text!/templates/users/collectionItem.html',
-], function(_, Backbone, UsersCollectionItemHTML) {
+  'eventHandlers/usersHandler'
+], function(_, Backbone, UsersCollectionItemHTML, UsersHandler) {
   
   // UsersCollectionItemView es un clase que representa la vista del
   // usuario en la grilla (<tr>...</tr>)
@@ -19,7 +20,6 @@ define([
     initialize: function () {
       
       // Agregamos listeners
-      this.listenTo(this.model, 'all', function () { console.log('item', arguments); });
       this.listenTo(this.model, 'remove', _.bind(this.modelDestroyed, this));
     },
 
@@ -41,13 +41,12 @@ define([
     modelDestroyed: function () {
 
       this.remove();
-      this.trigger('viewRemoved', this);
     },
 
     // Avisa que se quiere eliminar
     removeModel: function() {
 
-      this.trigger('removeModel', this);
+      UsersHandler.trigger('usersItemView:confirmRemove', this);
     }
   });
 

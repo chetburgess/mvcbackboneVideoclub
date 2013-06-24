@@ -1,8 +1,9 @@
 define([
   'underscore',
   'backbone',
-  'text!/templates/users/form.html'
-], function(_, Backbone, UserFormHTML) {
+  'text!/templates/users/form.html',
+  'eventHandlers/usersHandler'
+], function(_, Backbone, UserFormHTML, UsersHandler) {
   
   // UserFormView es un clase que representa la vista del
   // usuario en el listado de usuarios
@@ -37,7 +38,7 @@ define([
       });
 
       //
-      this.trigger('saveUser', this.model, attrs);
+      UsersHandler.trigger('usersFormView:save', this.model, attrs);
 
       //
       evt.preventDefault();

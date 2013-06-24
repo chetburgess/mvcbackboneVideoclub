@@ -6,9 +6,10 @@ define([
   'collections/movies',
   'views/moviesCollection',
   'views/moviesForm',
-  'views/moviesDetail'
+  'views/moviesDetail',
+  'eventHandlers/moviesHandler'
 ],
-function ($, _, Backbone, Modals, MoviesCollection, MoviesColllectionView, MoviesFormView, MoviesDetailView) {
+function ($, _, Backbone, Modals, MoviesCollection, MoviesColllectionView, MoviesFormView, MoviesDetailView, MoviesHandler) {
 
   //
   var collection = new MoviesCollection([]);
@@ -21,6 +22,14 @@ function ($, _, Backbone, Modals, MoviesCollection, MoviesColllectionView, Movie
       'movies/detail/:id': 'showDetailView',
       'movies/new': 'showFormView',
       'movies/edit/:id': 'showFormView'
+    },
+
+    //
+    initialize: function () {
+
+      this.listenTo(MoviesHandler, 'moviesItemView:confirmRemove', _.bind(this.confirmRemove, this));
+      this.listenTo(MoviesHandler, 'moviesCollectionView:filter', _.bind(this.filter, this));
+      this.listenTo(MoviesHandler, 'moviesFormView:save', _.bind(this.save, this));
     },
 
     // Referencia para la vista actual
@@ -55,8 +64,6 @@ function ($, _, Backbone, Modals, MoviesCollection, MoviesColllectionView, Movie
 
         // Instanciamos
         view = new MoviesColllectionView({collection: collection});
-        this.listenTo(view, 'filterItems', this.filter);
-        this.listenTo(view, 'removeMovie', this.confirmRemove);
 
         // Renderizamos
         $('#main').append(view.render().el);
@@ -177,7 +184,6 @@ function ($, _, Backbone, Modals, MoviesCollection, MoviesColllectionView, Movie
           collection: collection
           , model: model
         });
-        this.listenTo(view, 'saveMovie', this.save);
 
         // Renderizamos
         $('#main').append(view.render().el);
@@ -210,7 +216,7 @@ function ($, _, Backbone, Modals, MoviesCollection, MoviesColllectionView, Movie
         .done( function () {
           // Avisamos
           Modals.success({
-            message: 'la pelicula fue ' + (add? 'cargada' : 'actualizada') + ' con exito!',
+            message: 'La pelicula fue ' + (add? 'cargada' : 'actualizada') + ' con exito!',
             close: function () {
 
               self.navigate('movies', {trigger: true});

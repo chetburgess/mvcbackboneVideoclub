@@ -3,8 +3,9 @@ define([
   'backbone',
   'text!/templates/movies/collection.html',
   'views/moviesCollectionItem',
-  'views/paginatorView'
-], function(_, Backbone, MoviesCollectionHTML, MoviesCollectionItemView, PaginationView) {
+  'views/paginatorView',
+  'eventHandlers/moviesHandler'
+], function(_, Backbone, MoviesCollectionHTML, MoviesCollectionItemView, PaginationView, MoviesHandler) {
   
   // MovieCollectionView es un clase que representa la vista de
   // la pelicula completa del listado de peliculas
@@ -44,15 +45,9 @@ define([
     addMovie: function (model) {
 
       var itemView = new MoviesCollectionItemView({model: model});
-      this.listenTo(itemView, 'removeModel', _.bind(this.removeMovie, this));
 
       //
       this.$el.find('.list-container').append(itemView.render().el);
-    },
-
-    removeMovie: function (view) {
-
-      this.trigger('removeMovie', view);
     },
 
     // Cuando se reset-ea la collection, recargamos todas las peliculas
@@ -121,7 +116,7 @@ define([
         params.page = page;
       }
 
-      this.trigger('filterItems', this, params);
+      MoviesHandler.trigger('moviesCollectionView:filter', this, params);
       return false;
     },
 
