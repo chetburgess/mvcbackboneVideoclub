@@ -7,6 +7,7 @@ define([
   'routers/movies',
   'views/index'
 ], function ($, _, Backbone, Modals, UsersRouter, MoviesRouter, IndexView) {
+
   var app = {
     initialize: function () {
 
@@ -17,61 +18,47 @@ define([
       $(document).on('ajaxComplete', function () {
         Modals.loading({show: false});
       });
+
+      //
+      this.indexView = new IndexView();
+      $('#menu').append(this.indexView.render().el);
       
+      //
       var userRouter = new UsersRouter();
+      this.listenTo(userRouter, 'route', _.bind(this.setCurrentRouter, this, userRouter, 'users'));
+
       var movieRouter = new MoviesRouter();
-
-      var IndexRouter = Backbone.Router.extend({
-        routes: {
-          '': 'showIndexView'
-        },
-        routeInstances: {
-          'users': userRouter,
-          'movies': movieRouter
-        },
-        initialize: function() {
-          userRouter.bind('all', $.proxy(this, 'handleRemnantCrudView', ['movies']));
-          movieRouter.bind('all', $.proxy(this, 'handleRemnantCrudView',['users']));
-          this.bind('all', $.proxy(this, 'handleRemnantCrudView',['users', 'movies']));
-        },
-
-        handleRemnantCrudView: function(remnantCrudViews, route, routeAction) {
-          if (route === 'route' && routeAction){
-            this.ocultarVista(remnantCrudViews);
-          }
-        },
-
-        indexView: null,
-        showIndexView: function () {
-    
-          if (!this.indexView) {
-
-            this.indexView = new IndexView();
-            $('#main').append(this.indexView.render().el);
-
-          }
-
-        },
-
-        ocultarVista: function(remnantViews) {
-          _.each(remnantViews, function(remnantView){
-            if (this.routeInstances[remnantView].currentView) {
-              this.routeInstances[remnantView].currentView.$el.addClass('hide');
-            }
-          }, this);
-        }
-
-
-      });
-
-      // Instanciamos
-      var router = new IndexRouter();
+      this.listenTo(movieRouter, 'route', _.bind(this.setCurrentRouter, this, movieRouter, 'movies'));
 
       // Iniciamos
       Backbone.history.start();
+    },
+
+    //
+    currentRouter: null,
+    setCurrentRouter: function (router, name) {
+
+      // Si ya estabamos viendo una interfaz
+      if (!!this.currentRouter) {
+
+        // Si es la misma
+        if (this.currentRouter._name === name) {
+
+          return false;
+        }
+        else {
+
+          this.currentRouter.currentView.$el.addClass('hide');
+        }
+      }
+
+      this.currentRouter = router;
+      this.currentRouter['_name'] = name;
+      this.indexView.setActive(this.indexView.$el.find('li .' + name));
     }
   };
 
+  _.extend(app, Backbone.Events);
 
   return app;
 });

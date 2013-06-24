@@ -10,7 +10,7 @@
 	var Modals = {};
 
 	var newModal = function (config) {
-		var div = $('<div/>').html('<div class="modal hide alert alert-' + config.type + '" tabindex="-1" role="dialog" aria-hidden="true">'+
+		var div = $('<div/>').html('<div class="modal alert alert-' + config.type + '" tabindex="-1" role="dialog" aria-hidden="true">'+
 			'<div class="modal-header">'+
 			  '<button type="button" class="close cancel" data-dismiss="modal" aria-hidden="true">&times;</button>'+
 			  '<h4>' + config.title + '</h4>'+
@@ -104,7 +104,7 @@
 
 		if (!divLoading) {
 
-			divLoading = $('<div/>').html('<div class="modal hide" role="dialog" aria-hidden="true">'+
+			divLoading = $('<div/>').html('<div class="modal" role="dialog" aria-hidden="true">'+
 				'<div class="modal-body">'+
 				  '<p>' + config.message + '</p>'+
 				  '<div class="loading"></div>'+
