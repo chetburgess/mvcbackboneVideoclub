@@ -11,9 +11,16 @@ define([
 		main: '.main'
 	});
 
+	//
 	eventHandler.on('app:showView', function (view) {
 
 		App.main.show(view);
+	});
+
+	//
+	App.vent.on('app:showTop', function (view) {
+
+		App.top.show(view);
 	});
 
 	return App;

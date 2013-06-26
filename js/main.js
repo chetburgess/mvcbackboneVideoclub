@@ -14,8 +14,9 @@ require.config({
 });
 
 require([
-	'app/app'
-], function(App) {
+	'app/app',
+	'app/modules/top/top'
+], function(App, Top) {
 
 	App.start();
 });
