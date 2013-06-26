@@ -1,6 +1,7 @@
 define([
-  'backbone.babysitter',
+	'backbone',
   'backbone.wreqr',
+  'backbone.babysitter',
   'backbone.marionette'
 ], function(Backbone, Wreqr, Babysitter, Marionette) {
 

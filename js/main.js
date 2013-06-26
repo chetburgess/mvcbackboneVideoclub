@@ -6,7 +6,10 @@ require.config({
 		bbloader: 'libs/backbone.loader',
 		text: 'libs/text',
 		bootstrap: 'libs/bootstrap',
-		modals: 'libs/modals'
+		modals: 'libs/modals',
+		'backbone.marionette': 'libs/backbone.marionette',
+		'backbone.babysitter': 'libs/backbone.babysitter',
+		'backbone.wreqr': 'libs/backbone.wreqr'
 	}
 });
 
