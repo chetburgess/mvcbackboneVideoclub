@@ -1,5 +1,5 @@
 define([
-  'backbone',
+  'bbloader',
   'app/common/eventHandler'
 ], function (Backbone, eventHandler) {
 
