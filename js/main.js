@@ -15,8 +15,9 @@ require.config({
 
 require([
 	'app/app',
-	'app/modules/top/top'
-], function(App, Top) {
+	'app/modules/top/top',
+	'app/modules/movies/movies'
+], function(app, top, movies) {
 
-	App.start();
+	app.start();
 });

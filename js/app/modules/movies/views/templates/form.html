@@ -1,0 +1,47 @@
+<h3><%= !!_id? 'Editar' : 'Nueva' %> pelicula</h3>
+<hr />
+<form class="form-horizontal movie-form" action="#new/save">
+	<div class="control-group">
+		<label class="control-label">Titulo <em>(*)</em></label>
+		<div class="controls">
+			<input type="text" name="title" value="<%= title %>" required title="Ingresa el titulo de la pelicula" />
+		</div>
+	</div>
+	<div class="control-group">
+		<label class="control-label">Genero <em>(*)</em></label>
+		<div class="controls">
+			<input type="text" name="genre" value="<%= genre %>" required title="Ingresa el genero de la pelicula" />
+		</div>
+	</div>
+	<div class="control-group">
+		<label class="control-label">A&ntilde;o <em>(*)</em></label>
+		<div class="controls">
+			<input type="text" name="year" class="input-small" value="<%= year %>" required title="Indica el a&ntilde;o de la pelicula" />
+		</div>
+	</div>
+	<div class="control-group">
+		<label class="control-label">Calificaci&oacute;n <em>(*)</em></label>
+		<div class="controls">
+	    	<select class="input-mini rating" name="rating" title="Indica la calificaci&oacute;n de la pelicula">
+<% for (i=1;i<6;i++){ %> 
+				<option <% if (i == rating){ print('selected'); } %> value="<%= i %>"><%= i %></option>
+<% } %>				
+	    	</select>
+		</div>
+	</div>
+	<div class="control-group">
+		<label class="control-label">Afiche</label>
+		<div class="controls">
+			<img <%= poster !== ''? 'src="' + poster+'"' : '' %> class="poster-img thumb <%= poster !== ''? '' : 'hide' %>" />
+			<input type="file" class="poster uneditable-input" />
+			<div class="poster-loader loading hide" style="width: 200px"></div>
+		</div>
+	</div>
+	<% if (!!_id) { %>
+	<input type="hidden" name="_id" value="<%= _id %>" required />
+	<% } %>
+	<div class="form-actions">
+		<a href="#movies" class="btn">Cancelar</a>
+		<button type="submit" class="btn btn-primary save">Guardar</button>
+	</div>
+</form>

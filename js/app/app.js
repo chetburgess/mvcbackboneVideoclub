@@ -1,27 +1,33 @@
 define([
-  'bbloader',
-  'app/common/eventHandler'
+	'bbloader',
+	'app/common/eventHandler'
 ], function (Backbone, eventHandler) {
 
-	var App = new Backbone.Marionette.Application();
+	var app = new Backbone.Marionette.Application();
 
-	App.addRegions({
+	app.addRegions({
 		top: '.top',
 		menu: '.menu',
 		main: '.main'
 	});
 
 	//
-	eventHandler.on('app:showView', function (view) {
+	app.vent.on('app:showView', function (view) {
 
-		App.main.show(view);
-	});
+		this.main.show(view);
+	}, app);
 
 	//
-	App.vent.on('app:showTop', function (view) {
+	app.vent.on('app:showTop', function (view) {
 
-		App.top.show(view);
+		this.top.show(view);
+	}, app);
+
+	//
+	app.on('start', function () {
+
+      Backbone.history.start();
 	});
 
-	return App;
+	return app;
 });

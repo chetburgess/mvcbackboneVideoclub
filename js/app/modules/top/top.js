@@ -1,12 +1,12 @@
 define([
-  'bbloader',
   'app/app',
   'app/modules/top/views/top'
-], function (Backbone, App, TopView) {
+], function (app, TopView) {
 
-	var top = App.module('Top', function (Top, App) {
+	var top = app.module('Top', function (Top, app) {
 
-		App.on('start', function () {
+		// Cuando la aplicacion arraque le decimos que mostrar en el Top
+		app.on('start', function () {
 
 			this.vent.trigger('app:showTop', new TopView);
 		});

@@ -1,0 +1,14 @@
+<h3><%= title %></h3>
+<dl class="dl-horizontal">
+  <dt>Genero</dt>
+  <dd><%= genre %></dd>
+  <dt>A&ntilde;o</dt>
+  <dd><%= year %></dd>
+  <dt>Rating</dt>
+  <dd><%= rating %></dd>
+  <% if (poster !== '') { %>
+	  <dt>Poster</dt>
+	  <dd><img src="<%= poster %>" /></dd>
+  <% } %>
+</dl>
+<a href="#movies" class="btn">Volver a la lista</a>
