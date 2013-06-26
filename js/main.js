@@ -3,6 +3,7 @@ require.config({
 		jquery: 'libs/jquery-1.9.1',
 		underscore: 'libs/underscore',
 		backbone: 'libs/backbone',
+		bbloader: 'libs/backbone.loader',
 		text: 'libs/text',
 		bootstrap: 'libs/bootstrap',
 		modals: 'libs/modals'
@@ -10,11 +11,8 @@ require.config({
 });
 
 require([
-	'app',
-  'bootstrap',
-  'modals'
-], function(App, bootstrap, Modals) {
-
+	'app'
+], function(App) {
 
 	App.initialize();
 });
