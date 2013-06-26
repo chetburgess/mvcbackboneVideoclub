@@ -1,6 +1,6 @@
 define([
   'backbone',
-  'common/eventHandler'
+  'app/common/eventHandler'
 ], function (Backbone, eventHandler) {
 
 	var App = new Backbone.Marionette.Application();

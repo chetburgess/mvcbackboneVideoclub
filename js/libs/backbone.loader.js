@@ -1,9 +1,7 @@
 define([
 	'backbone',
-  'backbone.wreqr',
-  'backbone.babysitter',
   'backbone.marionette'
-], function(Backbone, Wreqr, Babysitter, Marionette) {
+], function(Backbone, Marionette) {
 
 	// Sobre escribimos el loadTemplae para usar HTML en lugar de un selector
 	Backbone.Marionette.TemplateCache.prototype.loadTemplate = function(templateId, callback) {
