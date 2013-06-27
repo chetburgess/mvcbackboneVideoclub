@@ -87,7 +87,7 @@ define([
           this.$el.find('.poster').removeClass('hide'); // Mostramos
 
           //
-          Modals.error({message: 'Ha ocurrido un error al intentar cargar el archivo'});
+          eventHandler.trigger('app:showError', {message: 'Ha ocurrido un error al intentar cargar el archivo'});
         }, this);
 
         // Comenzamos la carga del archivo
@@ -95,7 +95,7 @@ define([
       }
       else {
         
-        Modals.error({message: 'El archivo ingresado no es una imagen'});
+        eventHandler.trigger('app:showError', {message: 'El archivo ingresado no es una imagen'});
       }
     }
   });

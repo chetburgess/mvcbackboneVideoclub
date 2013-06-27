@@ -5,10 +5,10 @@ define([
   'app/common/eventHandler'
 ], function (Backbone, app, MenuView, eventHandler) {
 
-	app.module('menuModule', function(menuModule, app){
+	var menu = app.module('Menu', function(Menu, app){
 		this.menuView = new MenuView(); 
     this.initialize =  function(){
-      eventHandler.on('menuView:createButton', this.doCreateButton, this);
+      eventHandler.on('menu:createButton', this.doCreateButton, this);
       app.vent.trigger('app:showMenu', this.menuView);
     };
     this.on('start', this.initialize, this);
@@ -18,5 +18,5 @@ define([
     };
 	});
 
-	return app.menuModule;
+	return menu;
 });

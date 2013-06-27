@@ -1,7 +1,7 @@
 define([
   'underscore',
   'bbloader',
-  'eventHandlers/moviesHandler',
+  'app/common/eventHandler',
   'text!app/modules/movies/views/templates/collection.html',
   'app/modules/movies/views/collectionItem',
   //'views/paginatorView'
@@ -42,7 +42,6 @@ define([
       }
 
       eventHandler.trigger('movies:collection:filter', this, params);
-      return false;
     },
 
     //

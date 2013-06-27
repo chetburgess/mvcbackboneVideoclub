@@ -1,6 +1,6 @@
 define([
   'bbloader',
-  'eventHandlers/moviesHandler',
+  'app/common/eventHandler',
   'text!app/modules/movies/views/templates/collectionItem.html'
 ], function(Backbone, eventHandler, moviesCollectionItemHTML) {
   
@@ -12,10 +12,10 @@ define([
     template: moviesCollectionItemHTML,
     
     events: {
-      'click button.remove': 'remove'
+      'click button.remove': 'confirmRemove'
     },
 
-    remove: function() {
+    confirmRemove: function() {
 
       eventHandler.trigger('movies:collection:confirmRemove', this);
     }

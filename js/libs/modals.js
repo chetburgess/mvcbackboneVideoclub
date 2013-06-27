@@ -1,7 +1,7 @@
 (function (factory){
   if( typeof define === 'function' && define.amd){
     //AMD
-    define(['jquery'], factory);
+    define(['jquery', 'bootstrap'], factory);
   }else{
     factory(this.jQuery || this.ender );
   }

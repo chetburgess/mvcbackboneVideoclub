@@ -14,11 +14,19 @@ require.config({
 });
 
 require([
+	'app/common/eventHandler',
 	'app/app',
 	'app/modules/top/top',
 	'app/modules/movies/movies',
 	'app/modules/menu/menu'
-], function(app, top, movies, menuModule) {
+], function(eventHandler, app, top, movies, menu) {
 
+	//
+	menu.on('start', function () {
+
+		eventHandler.trigger('menu:createButton', movies.menuConf);
+	});
+
+	//
 	app.start();
 });
