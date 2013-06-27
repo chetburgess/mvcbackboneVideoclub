@@ -12,6 +12,11 @@ define([
 
 	var movies = app.module('Movies', function (Movies, app) {
 
+		this.buttonMetadata = {
+			label: 'movies',
+			routePath: '#movies'
+		};
+
 		// Collection init
 		var moviesCollection = new MoviesCollection([{
 		   "_id": "827ab53afbe25a7dbc462a4f73000f6c",
