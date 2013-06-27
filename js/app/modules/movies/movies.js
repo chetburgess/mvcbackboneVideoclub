@@ -4,10 +4,12 @@ define([
 	'app/modules/movies/routers/movies',
 	'app/modules/movies/controllers/movies',
 	'app/modules/movies/collections/movies',
-	'app/modules/movies/views/collection',
+	'app/modules/movies/views/layout',
+    'app/modules/movies/views/collection',
+    'app/modules/pagination/views/pagination',
 	'app/modules/movies/views/form',
 	'app/modules/movies/views/detail'
-], function (app, eventHandler, MoviesRouter, moviesController, MoviesCollection, MoviesCollectionView, MoviesFormView, MoviesDetailView) {
+], function (app, eventHandler, MoviesRouter, moviesController, MoviesCollection, MoviesCollectionLayout, MoviesCollectionView, PaginationView, MoviesFormView, MoviesDetailView) {
 
 	var movies = app.module('Movies', function (Movies, app) {
 		var moviesCollection, prevFilterParams, router, validate;
@@ -48,13 +50,26 @@ define([
 		//
 		eventHandler.on('movies:router:collection', function () {
 
-			var view = new MoviesCollectionView({
-				collection: moviesCollection
+			var layout = new MoviesCollectionLayout(),
+				paginationView = new PaginationView({collection: moviesCollection}),
+				collectionView = new MoviesCollectionView({collection: moviesCollection});
+
+			// Escuchamos cuando se cambia de pagina
+			collectionView.listenTo(paginationView, 'changePage', function (page) {
+
+				// Avisamos que se cambio de pagina
+				prevFilterParams.page = page;
+				eventHandler.trigger('movies:collection:filter', collectionView, prevFilterParams);
 			});
 
-			app.vent.trigger('app:showView', view);
+			//
+			app.vent.trigger('app:showView', layout);
 
-			eventHandler.trigger('movies:collection:filter', view, {});
+			eventHandler.trigger('movies:collection:filter', collectionView, {});
+
+			// Seteamos las vistas para las regiones
+			layout.pagination.show(paginationView);
+			layout.table.show(collectionView);
 		});
 
 		eventHandler.on('movies:router:form', function (id) {

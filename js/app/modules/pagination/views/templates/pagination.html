@@ -1,0 +1,15 @@
+<div class="pagination pagination-centered">
+	<ul class="item-list-container">
+		<li class="previous <%= pageNumber === 1? 'disabled': 'go-previous' %>">
+			<a href="#">Prev</a>
+		</li>
+	<% for ( i=1 ; i<=totalPages ; i++ ){ %>
+		<li class="<%= pageNumber == i ? 'active' : 'page-number' %>">
+			<a href="#"><%= i %></a>
+		</li>
+	<% } %>
+		<li class="next <%= pageNumber === totalPages || totalPages === 0? 'disabled': 'go-next' %>">
+			<a href="#">Next</a>
+		</li>
+	</ul>
+</div>

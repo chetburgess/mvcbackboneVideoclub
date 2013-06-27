@@ -3,16 +3,15 @@ define([
   'bbloader',
   'app/common/eventHandler',
   'text!app/modules/movies/views/templates/collection.html',
-  'app/modules/movies/views/collectionItem',
-  //'views/paginatorView'
+  'app/modules/movies/views/collectionItem'
 ], function(_, Backbone, eventHandler, moviesCollectionHTML, MoviesCollectionItemView) {
   
   //
   var MoviesCollectionView = Backbone.Marionette.CompositeView.extend({
 
-    tagName: 'div',
+    tagName: 'table',
 
-    className: 'span12',
+    className: 'table table-striped',
 
     template: moviesCollectionHTML,
 
