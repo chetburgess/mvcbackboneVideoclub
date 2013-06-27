@@ -53,15 +53,15 @@ define([
         goPreviousPage: function (evt) {
 
             evt.preventDefault();
-            var page = this.collection.pageNumber;
-            this.changePage(page--);
+            var page = this.collection.pageNumber - 1;
+            this.changePage(page);
             return false;
         },
         goNextPage: function (evt) {
 
             evt.preventDefault();
-            var page = this.collection.pageNumber;
-            this.changePage(page++);
+            var page = this.collection.pageNumber + 1;
+            this.changePage(page);
             return false;
         },
         preventsNavigate: function(evt) {
