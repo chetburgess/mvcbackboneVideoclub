@@ -19,6 +19,13 @@ define([
 		//
 		prevFilterParams = {};
 
+		moviesCollection.on('request', function(){
+			app.vent.trigger('app:showSpinner');
+		});
+		moviesCollection.on('sync', function(){
+			app.vent.trigger('app:hideSpinner');
+		});
+
 		//
 		validate = function (id) {
       
@@ -52,7 +59,7 @@ define([
 				collection: moviesCollection
 			});
 
-			app.vent.trigger('app:showView', view);
+			app.vent.trigger('app:showView', view, movies.menuConf);
 
 			eventHandler.trigger('movies:collection:filter', view, {});
 		});

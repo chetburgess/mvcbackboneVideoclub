@@ -13,8 +13,8 @@ define([
 	});
 
 	//
-	app.vent.on('app:showView', function (view) {
-
+	app.vent.on('app:showView', function (view, module) {
+		eventHandler.trigger('menu:highligthItemMenu', module);
 		this.main.show(view);
 	}, app);
 	app.vent.on('app:showTop', function (view) {
@@ -27,17 +27,14 @@ define([
 
 	//
 	app.on('start', function () {
-
-      //
-      $(document).on('ajaxSend', function () {
-        Modals.loading({show: true});
-      });
-      $(document).on('ajaxComplete', function () {
-        Modals.loading({show: false});
-      });
-
-      //
       Backbone.history.start();
+	});
+
+	app.vent.on('app:showSpinner', function () {
+		Modals.loading({show: true});
+	});
+	app.vent.on('app:hideSpinner', function () {
+		Modals.loading({show: false});
 	});
 
 	//
