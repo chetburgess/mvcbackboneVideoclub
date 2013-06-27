@@ -16,8 +16,9 @@ require.config({
 require([
 	'app/app',
 	'app/modules/top/top',
-	'app/modules/movies/movies'
-], function(app, top, movies) {
+	'app/modules/movies/movies',
+	'app/modules/menu/menu'
+], function(app, top, movies, menuModule) {
 
 	app.start();
 });

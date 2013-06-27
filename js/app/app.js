@@ -27,6 +27,11 @@ define([
 	app.on('start', function () {
 
       Backbone.history.start();
+      eventHandler.trigger('menuView:createButton', app.Movies.buttonMetadata);
+	});
+
+	app.vent.on('app:showMenu', function (view) {
+		app.menu.show(view);
 	});
 
 	return app;
