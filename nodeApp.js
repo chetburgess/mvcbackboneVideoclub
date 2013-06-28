@@ -48,7 +48,7 @@ app.get('/tareas/nueva', function(request, response){
   });
 });
 
-app.post('/tareas', function(request, response){
+/*app.put('/movies', function(request, response){
   var tarea = new Tarea(request.body.tarea);
   tarea.save(function(err){
     if (!err) {
@@ -57,6 +57,26 @@ app.post('/tareas', function(request, response){
       response.redirect('/tareas/nueva');
     }
   });
+});*/
+//  update movies
+
+/*
+    Falta el id aca !!
+
+*/
+app.put('/movies/:id', function(req, res) {
+
+    res.send('seems ok put method');
+    var tarea = new Tarea(req.body);
+    tarea.save(function(err){
+      if (!err) {
+        console.log('Ok');
+        //response.redirect('/tareas');
+      }else{
+        console.log('Error' + err);
+        //response.redirect('/tareas/nueva');
+      }
+    });
 });
 
 // Edit
