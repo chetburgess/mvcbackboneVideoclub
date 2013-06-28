@@ -2,13 +2,13 @@
 /**
  * Module dependencies.
  */
-
+var fs = require('fs');
 var express = require('express')
   , http = require('http')
   , path = require('path')
   , mongoose = require('mongoose');
 
-mongoose.connect('mongodb://localhost/deloitte_tool');
+mongoose.connect('mongodb://localhost/desarrollo_tareas');
 var Schema = mongoose.Schema;
 
 var Tarea = new Schema({
@@ -32,15 +32,14 @@ app.configure('development', function(){
 });
 
 app.get('/', function(req, res){
-  res.send('Hello World');
+   fs.readFile('index.html', 'utf8', function(err, text){
+        res.send(text);
+    });
 });
 
 app.get('/tareas', function(req, res){
   Tarea.find({}, function (err, docs) {
-    res.render('tareas/index', {
-      title: 'Vista index lista de tareas',
-      docs: docs
-    });
+    res.send(docs);
   });
 }); 
 app.get('/tareas/nueva', function(request, response){
