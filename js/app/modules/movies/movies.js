@@ -12,7 +12,7 @@ define([
 ], function (app, eventHandler, MoviesRouter, moviesController, MoviesCollection, MoviesCollectionLayout, MoviesCollectionView, PaginationView, MoviesFormView, MoviesDetailView) {
 
 	var movies = app.module('Movies', function (Movies, app) {
-		var moviesCollection, prevFilterParams, router, validate;
+		var moviesCollection, prevFilterParams, validate, router;
 
 		
 		// Collection init
@@ -32,8 +32,12 @@ define([
 		validate = function (id) {
       
 			var model = new moviesCollection.model({_id: id}),
-			dfd = jQuery.Deferred();
+				dfd = jQuery.Deferred();
 
+			//
+			app.vent.trigger('app:showSpinner');
+
+			//
 			$.when(model.fetch())
 				.done(function (response) {
 
@@ -46,6 +50,11 @@ define([
 
 					// Mostramos el listado
 					router.navigate('movies', {trigger: true});
+				})
+				.always(function () {
+
+					//
+					app.vent.trigger('app:hideSpinner');
 				});
 
 			return dfd.promise();
@@ -53,76 +62,9 @@ define([
 
 
 		//
-		// EVENTOS DEL ROUTER
-		//
-		eventHandler.on('movies:router:collection', function () {
-
-			var layout = new MoviesCollectionLayout(),
-				paginationView = new PaginationView({collection: moviesCollection}),
-				collectionView = new MoviesCollectionView({collection: moviesCollection});
-
-			// Escuchamos cuando se cambia de pagina
-			collectionView.listenTo(paginationView, 'changePage', function (page) {
-
-				// Avisamos que se cambio de pagina
-				prevFilterParams.page = page;
-				eventHandler.trigger('movies:collection:filter', collectionView, prevFilterParams);
-			});
-
-			//
-			app.vent.trigger('app:showView', layout, Movies.menuConf);
-
-			eventHandler.trigger('movies:collection:filter', collectionView, {});
-
-			// Seteamos las vistas para las regiones
-			layout.pagination.show(paginationView);
-			layout.table.show(collectionView);
-		});
-
-		eventHandler.on('movies:router:form', function (id) {
-
-			var success = function (model) {
-
-				var view = new MoviesFormView({
-					model: model
-				});
-
-				app.vent.trigger('app:showView', view);
-			};
-
-			// Si pasamos un id
-			if (!!id) {
-
-				// Validamos que la pelicula exista
-				validate(id)
-					.done(success);
-			}
-			else {
-
-				success(new moviesCollection.model);
-			}
-		});
-
-		eventHandler.on('movies:router:detail', function (id) {
-
-			var success = function (model) {
-				
-				// Instanciamos
-				view = new MoviesDetailView({model: model});
-
-				app.vent.trigger('app:showView', view);
-			};
-
-			// Validamos que la pelicula exista
-			validate(id)
-				.done(success);
-		});
-
-
-		//
 		// EVENTOS DE LAS VISTAS
 		//
-		eventHandler.on('movies:collection:filter', function (view, params) {
+		eventHandler.on('movies:collection:filter', function (params) {
 
 			if (!params) {
 				params = prevFilterParams;
@@ -176,7 +118,7 @@ define([
 
 			// Guardamos
 			model.save(attrs)
-				.done( function () {
+				.done(function () {
 
 					// Avisamos
 					eventHandler.trigger('app:showSuccess', {
@@ -187,7 +129,7 @@ define([
 						}
 					});
 				})
-				.fail( function (response) {
+				.fail(function (response) {
 
 					var msg = 'Ha ocurrido un error.<br />Por favor, recarge pa pagina.';
 
@@ -202,9 +144,71 @@ define([
 		});
 
 
+		//
 		// Router Init
+		//
 		router = new MoviesRouter({controller: moviesController});
+		
+		router.on('route:showCollectionView', function () {
 
+			var layout = new MoviesCollectionLayout(),
+				paginationView = new PaginationView({collection: moviesCollection}),
+				collectionView = new MoviesCollectionView({collection: moviesCollection});
+
+			// Escuchamos cuando se cambia de pagina
+			collectionView.listenTo(paginationView, 'changePage', function (page) {
+
+				// Avisamos que se cambio de pagina
+				prevFilterParams.page = page;
+				eventHandler.trigger('movies:collection:filter', prevFilterParams);
+			});
+
+			//
+			app.vent.trigger('app:showView', layout, Movies.menuConf);
+
+			eventHandler.trigger('movies:collection:filter', {});
+
+			// Seteamos las vistas para las regiones
+			layout.pagination.show(paginationView);
+			layout.table.show(collectionView);
+		});
+
+		router.on('route:showFormView', function (id) {
+
+			var success = function (model) {
+
+				var view = new MoviesFormView({
+					model: model
+				});
+
+				app.vent.trigger('app:showView', view, Movies.menuConf);
+			};
+
+			// Si pasamos un id
+			if (!!id) {
+
+				// Validamos que la pelicula exista
+				validate(id)
+					.done(success);
+			}
+			else {
+
+				success(new moviesCollection.model);
+			}
+		});
+
+		router.on('route:showDetailView', function (id) {
+
+			// Validamos que la pelicula exista
+			validate(id)
+				.done(function (model) {
+				
+				// Instanciamos
+				view = new MoviesDetailView({model: model});
+
+				app.vent.trigger('app:showView', view, Movies.menuConf);
+			});
+		});
 	});
 
 	//

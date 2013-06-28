@@ -18,23 +18,20 @@ define([
 		this.main.show(view);
 	}, app);
 	app.vent.on('app:showTop', function (view) {
-
 		this.top.show(view);
 	}, app);
 	app.vent.on('app:showMenu', function (view) {
 		app.menu.show(view);
 	});
-
-	//
-	app.on('start', function () {
-      Backbone.history.start();
-	});
-
 	app.vent.on('app:showSpinner', function () {
 		Modals.loading({show: true});
 	});
 	app.vent.on('app:hideSpinner', function () {
 		Modals.loading({show: false});
+	});
+	
+	app.on('start', function () {
+      Backbone.history.start();
 	});
 
 	//

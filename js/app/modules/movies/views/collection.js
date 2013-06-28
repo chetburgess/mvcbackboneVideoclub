@@ -40,7 +40,7 @@ define([
         params.page = page;
       }
 
-      eventHandler.trigger('movies:collection:filter', this, params);
+      eventHandler.trigger('movies:collection:filter', params);
     },
 
     //
