@@ -112,6 +112,24 @@ define([
 			});
 		});
 
+		eventHandler.on('movies:collection:showInfo', function (view) {
+
+			//
+			var detail = new MoviesDetailView({model: view.model});
+
+			//
+			app.UsersRels.setConfig({
+				idReg: view.model.get('id'),
+				typeReg: 'movie'
+			}); 
+
+			// 
+			app.Modal.show([
+				{view: detail, title: 'Details'},
+				{view: app.UsersRels.layout, title: 'Users'}
+			]);
+		});
+
 		eventHandler.on('movies:form:save', function (model, attrs) {
 			var self = this,
 				add = !model.get('_id');
@@ -203,10 +221,10 @@ define([
 			validate(id)
 				.done(function (model) {
 				
-				// Instanciamos
-				view = new MoviesDetailView({model: model});
+					// Instanciamos
+					var view = new MoviesDetailView({model: model});
 
-				app.vent.trigger('app:showView', view, Movies.menuConf);
+					app.vent.trigger('app:showView', view, Movies.menuConf);
 			});
 		});
 	});

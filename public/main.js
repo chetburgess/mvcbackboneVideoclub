@@ -18,8 +18,9 @@ require([
 	'app/app',
 	'app/modules/top/top',
 	'app/modules/movies/movies',
-	'app/modules/menu/menu'
-], function(eventHandler, app, top, movies, menu) {
+	'app/modules/menu/menu',
+	'app/modules/usersRels/usersRels'
+], function(eventHandler, app, top, movies, menu, usersRels) {
 
 	//
 	menu.on('start', function () {

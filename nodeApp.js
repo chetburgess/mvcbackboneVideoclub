@@ -26,9 +26,9 @@ var Users = mongoose.model('Users', new Schema({
 }));
 
 var UsersRels = mongoose.model('UsersRels', new Schema({
-  idReg: Number,
+  idReg: String,
   type: String,
-  users: [Users]
+  idUser: String
 }));
 
 var app = express();
@@ -136,6 +136,50 @@ app.get('/movies/:id', function (req, res) {
 app.delete('/movies/:id', function (req, res) {
 
   Movies.remove({_id: req.params.id}, function (err) {
+
+    if (!err) {
+
+      res.send('{"success":true}');
+    }
+    else {
+
+      res.status(404).send('{"success":false}');
+    }
+  });
+});
+
+
+///
+// UsersRels
+//
+// select
+app.get('/usersRels', function (req, res) {
+
+  UsersRels.find({idReg: req.params.idReg, typeReg: req.params.typeReg}, function (err, docs) {
+
+    res.send(docs);
+  });
+});
+// insert
+app.post('/usersRels', function (req, res) {
+
+  var doc = new UsersRels(req.body);
+  doc.save(function (err, doc) {
+
+    if (!err) {
+
+      res.send(doc);
+    }
+    else {
+
+      res.send('{"success":false}');
+    }
+  });
+});
+// remove
+app.delete('/usersRels/:id', function (req, res) {
+
+  UsersRels.remove({_id: req.params.id}, function (err) {
 
     if (!err) {
 

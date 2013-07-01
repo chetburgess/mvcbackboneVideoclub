@@ -12,12 +12,18 @@ define([
     template: moviesCollectionItemHTML,
     
     events: {
-      'click button.remove': 'confirmRemove'
+      'click button.remove': 'confirmRemove',
+      'click button.info': 'showInfo'
     },
 
     confirmRemove: function() {
 
       eventHandler.trigger('movies:collection:confirmRemove', this);
+    },
+
+    showInfo: function() {
+
+      eventHandler.trigger('movies:collection:showInfo', this);
     }
   });
 

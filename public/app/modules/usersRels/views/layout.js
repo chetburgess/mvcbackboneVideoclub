@@ -2,20 +2,19 @@ define([
     'underscore',
     'bbloader',
     'app/common/eventHandler',
-    'text!app/modules/movies/views/templates/layout.html'
-], function(_, Backbone, eventHandler, moviesLayoutHTML) {
+    'text!app/modules/usersRels/views/templates/layout.html'
+], function(_, Backbone, eventHandler, usersRelsLayoutHTML) {
   
   //
-  var MoviesCollectionLayout = Backbone.Marionette.Layout.extend({
+  var UsersRelsCollectionLayout = Backbone.Marionette.Layout.extend({
 
     tagName: 'div',
 
     className: 'span12',
 
-    template: moviesLayoutHTML,
+    template: usersRelsLayoutHTML,
 
     regions: {
-        pagination: '.pagination-container',
         table: '.collection-container'
     },
 
@@ -30,7 +29,7 @@ define([
 
       var params = {
         page: 1,
-        title: this.$el.find('.search').val()
+        name: this.$el.find('.search').val()
       };
 
       if (!isNaN(page) && page > 0) {
@@ -38,7 +37,7 @@ define([
         params.page = page;
       }
 
-      eventHandler.trigger('movies:collection:filter', params);
+      eventHandler.trigger('usersRels:collection:filter', params);
     },
 
     //
@@ -57,5 +56,5 @@ define([
     }
   });
 
-    return MoviesCollectionLayout;
+    return UsersRelsCollectionLayout;
 });
