@@ -3,10 +3,10 @@ define([
 ], function(BaseModel) {
 
   var Movie = BaseModel.extend({
-    urlRoot: 'http://socramg.iriscouch.com/videoclub/',
+    urlRoot: '/movies',
     
     defaults: {
-      _id: false,
+      _id: undefined,
       title: '',
       year: '',
       genre: '',

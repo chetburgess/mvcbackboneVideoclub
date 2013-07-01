@@ -114,7 +114,7 @@ define([
 
 		eventHandler.on('movies:form:save', function (model, attrs) {
 			var self = this,
-				add = !model._id;
+				add = !model.get('_id');
 
 			// Guardamos
 			model.save(attrs)
@@ -129,12 +129,12 @@ define([
 						}
 					});
 				})
-				.fail(function (response) {
+				.fail(function (res) {
 
 					var msg = 'Ha ocurrido un error.<br />Por favor, recarge pa pagina.';
 
 					//@TODO Ver de centralizar este analisis
-					if (xhr.status === 409) {
+					if (res.status === 409) {
 						msg = 'El registro ya ha sido actualizada por otro usuario.<br />Actualice la p&aacute;gina para ver los nuevos datos.';
 					}
 

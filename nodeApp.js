@@ -8,17 +8,33 @@ var express = require('express')
   , path = require('path')
   , mongoose = require('mongoose');
 
-mongoose.connect('mongodb://localhost/desarrollo_tareas');
+mongoose.connect('mongodb://localhost/deloitte');
 var Schema = mongoose.Schema;
 
-var Tarea = new Schema({
-  tarea: String
-});
-var Tarea = mongoose.model('Tarea', Tarea);
+var Movies = mongoose.model('Movies', new Schema({
+  title: String,
+  year: Number,
+  rating: Number,
+  genre: String,
+  poster: String
+}));
+
+var Users = mongoose.model('Users', new Schema({
+  name: String,
+  lastName: String,
+  email: String
+}));
+
+var UsersRels = mongoose.model('UsersRels', new Schema({
+  idReg: Number,
+  type: String,
+  users: [Users]
+}));
 
 var app = express();
 
-app.configure(function(){
+app.configure(function () {
+
   app.set('port', process.env.PORT || 3000);
   app.use(express.logger('dev'));
   app.use(express.bodyParser());
@@ -27,49 +43,114 @@ app.configure(function(){
   app.use(express.static(path.join(__dirname, 'public')));
 });
 
-app.configure('development', function(){
+app.configure('development', function () {
+
   app.use(express.errorHandler());
 });
 
-app.get('/', function(req, res){
-   fs.readFile('index.html', 'utf8', function(err, text){
-        res.send(text);
-    });
+
+//
+app.get('/', function (req, res) {
+
+  fs.readFile('index.html', 'utf8', function (err, text) {
+    res.send(text);
+  });
 });
 
-app.get('/tareas', function(req, res){
-  Tarea.find({}, function (err, docs) {
+
+///
+// MOVIES
+//
+// select
+app.get('/movies', function (req, res) {
+
+  Movies.find({}, function (err, docs) {
+
     res.send(docs);
   });
-}); 
-app.get('/tareas/nueva', function(request, response){
-  response.render('tareas/nueva.jade', {
-      title: 'Nueva tarea'
+});
+// insert
+app.post('/movies', function (req, res) {
+
+  var doc = new Movies(req.body);
+  doc.save(function (err, doc) {
+
+    if (!err) {
+
+      res.send(doc);
+    }
+    else {
+
+      res.send('{"success":false}');
+    }
   });
 });
+// update
+app.put('/movies/:id', function (req, res) {
 
-app.post('/tareas', function(request, response){
-  var tarea = new Tarea(request.body.tarea);
-  tarea.save(function(err){
+  Movies.findById(req.params.id, function (err, doc) {
+
     if (!err) {
-      response.redirect('/tareas');
-    }else{
-      response.redirect('/tareas/nueva');
+
+      for (var i in req.body) {
+
+        if (i !== '_id') {
+          doc[i] = req.body[i];
+        }
+      }
+
+      doc.save(function (err, doc) {
+
+        console.log(err, doc);
+        if (!err) {
+
+          res.send(doc);
+        }
+        else {
+
+          res.status(403).send('{"success":false}');
+        }
+      });
+    }
+    else {
+
+      res.status(404).send('{"success":false}');
+    }
+  });
+});
+// edit
+app.get('/movies/:id', function (req, res) {
+
+  Movies.findById(req.params.id, function (err, doc) {
+
+    if (!err) {
+
+      res.send(doc);
+    }
+    else {
+
+      res.status(404).send('{"success":false}');
+    }
+  });
+});
+// remove
+app.delete('/movies/:id', function (req, res) {
+
+  Movies.remove({_id: req.params.id}, function (err) {
+
+    if (!err) {
+
+      res.send('{"success":true}');
+    }
+    else {
+
+      res.status(404).send('{"success":false}');
     }
   });
 });
 
-// Edit
-app.get('/tareas/:id/editar', function(request, response){
-  Tarea.findById(require.params.id, function(err, doc){
-    response.render('tareas/editar', {
-      title: 'Vista Editar Tarea',
-      tarea: doc
-    });
-  });
-});
 
+http.createServer(app).listen(app.get('port'), function () {
 
-http.createServer(app).listen(app.get('port'), function(){
   console.log("Express server listening on port " + app.get('port'));
 });

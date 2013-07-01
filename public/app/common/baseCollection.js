@@ -7,11 +7,11 @@ define([
     totalItems : 0,
     pageNumber : 1,
     pageSize : 10,
-    parse: function (resp, options) {
+    /*parse: function (resp, options) {
       
       this.totalItems = resp.total;
     	return resp.rows;
-    },
+    },*/
     fetch: function (options) {
 
       var options = options || {};
