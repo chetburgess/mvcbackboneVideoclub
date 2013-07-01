@@ -101,7 +101,6 @@ app.put('/movies/:id', function (req, res) {
 
       doc.save(function (err, doc) {
 
-        console.log(err, doc);
         if (!err) {
 
           res.send(doc);
