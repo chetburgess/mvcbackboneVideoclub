@@ -14,7 +14,9 @@ define([
 
 	//
 	app.vent.on('app:showView', function (view, module) {
-		eventHandler.trigger('menu:highligthItemMenu', module);
+		if (module){
+			eventHandler.trigger('menu:highligthItemMenu', module);
+		}
 		this.main.show(view);
 	}, app);
 	app.vent.on('app:showTop', function (view) {

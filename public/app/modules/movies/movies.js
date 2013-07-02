@@ -124,7 +124,7 @@ define([
 			}); 
 
 			// 
-			app.Modal.show([
+			app.ModalModule.show([
 				{view: detail, title: 'Details'},
 				{view: app.UsersRels.layout, title: 'Users'}
 			]);

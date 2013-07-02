@@ -1,0 +1,7 @@
+<ul>
+  <% _.each(items, function(item){ %>
+  <li>
+  	<a href="#<%= item.title %>" data-toggle="tab"><%= item.title %></a>
+  </li>
+  <% }); %>
+</ul>
