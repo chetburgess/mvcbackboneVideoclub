@@ -6,7 +6,7 @@ define([
 ], function($, _, Backbone, paginationHTML) {
   
     //
-    var PaginatorView = Backbone.View.extend({
+    var PaginatorView = Backbone.Marionette.View.extend({
 
         tagName: 'div',
 

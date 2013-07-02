@@ -15,6 +15,7 @@ define([
     template: usersRelsLayoutHTML,
 
     regions: {
+        pagination: '.pagination-container',
         table: '.collection-container'
     },
 
