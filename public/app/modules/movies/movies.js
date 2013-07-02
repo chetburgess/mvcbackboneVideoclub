@@ -124,11 +124,12 @@ define([
 			}); 
 
 			// 
-			app.ModalModule.show([
+			var modalLayout = app.ModalModule.show([
 				{view: detail, title: 'Details'},
 				{view: app.UsersRels.layout, title: 'Users'}
 			]);
-		});
+			this.layout.modal.show(modalLayout);
+		}, this);
 
 		eventHandler.on('movies:form:save', function (model, attrs) {
 			var self = this,
@@ -189,7 +190,9 @@ define([
 			// Seteamos las vistas para las regiones
 			layout.pagination.show(paginationView);
 			layout.table.show(collectionView);
+			Movies.layout = layout;
 		});
+		
 
 		router.on('route:showFormView', function (id) {
 

@@ -16,7 +16,8 @@ define([
 
     regions: {
         pagination: '.pagination-container',
-        table: '.collection-container'
+        table: '.collection-container',
+        modal: '.modal-body'
     },
 
     //
