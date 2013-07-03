@@ -13,22 +13,6 @@
     <div class="menu"></div>
     <div class="main" class="row"></div>
   </div>
+  <div class="modals"></div>
 </body>
-	<script id="movie-form" type="text/x-handlebars-template">
-	  <form action="#" class="hidden">
-		    <strong>Titulo</strong>: <input type="text" name="title" class="title" value="{{title}}" /><br />
-		    <strong>Genero</strong>: <input type="text" class="genre" name="genre" value="{{genre}}" /><br />
-		    <strong>A&ntilde;o</strong>: <input type="text" name="year" class="year" value="{{year}}" /><br />
-			<br />
-			<button class="save">Guardar</button>
-			<button class="cancel">Cancelar</button>
-		</form>
-	</script>
-	<script id="movie-list" type="text/x-handlebars-template">
-		<ul>
-	   {{#each movies}}
-	   		<li><a href="#movies/edit/{{this.id}}">{{this.title}}</a></li>
-		 {{/each}}
-		</ul>
-	</script>
 </html>

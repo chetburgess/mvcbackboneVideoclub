@@ -1,5 +1,1 @@
-  <% _.each(items, function(item, key){ %>
-  <li class="<%= key ==0? 'active': ''%>">
-  	<a href="#<%= item.title %>" data-toggle="tab"><%= item.title %></a>
-  </li>
-  <% }); %>
+<a data-toggle="tab" data-target="#modalTab<%= _index %>"><%= title %></a>

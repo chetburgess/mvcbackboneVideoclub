@@ -1,8 +1,7 @@
 define([
   'bbloader',
-  'app/common/eventHandler',
   'text!app/modules/movies/views/templates/collectionItem.html'
-], function(Backbone, eventHandler, moviesCollectionItemHTML) {
+], function (Backbone, moviesCollectionItemHTML) {
   
   //
   var MoviesCollectionItemView = Backbone.Marionette.ItemView.extend({
@@ -18,12 +17,12 @@ define([
 
     confirmRemove: function() {
 
-      eventHandler.trigger('movies:collection:confirmRemove', this);
+      this.trigger('confirmRemove', this);
     },
 
     showInfo: function() {
 
-      eventHandler.trigger('movies:collection:showInfo', this);
+      this.trigger('showInfo', this);
     }
   });
 

@@ -1,6 +1,6 @@
 define([
   'app/common/baseModel'
-], function(BaseModel) {
+], function (BaseModel) {
 
   var UsersRels = BaseModel.extend({
     urlRoot: '/usersRels',

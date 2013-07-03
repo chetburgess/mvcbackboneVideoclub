@@ -1,9 +1,8 @@
 define([
   'jquery',
   'bbloader',
-  'app/common/eventHandler',
   'text!app/modules/movies/views/templates/form.html'
-], function($, Backbone, eventHandler, moviesFormHTML) {
+], function($, Backbone, moviesFormHTML) {
   
   //
   var MoviesFormView = Backbone.Marionette.ItemView.extend({
@@ -33,7 +32,7 @@ define([
       });
 
       //
-      eventHandler.trigger('movies:form:save', this.model, attrs);
+      this.trigger('save', this.model, attrs);
 
       //
       evt.preventDefault();
@@ -87,7 +86,7 @@ define([
           this.$el.find('.poster').removeClass('hide'); // Mostramos
 
           //
-          eventHandler.trigger('app:showError', {message: 'Ha ocurrido un error al intentar cargar el archivo'});
+          this.trigger('showError', {message: 'Ha ocurrido un error al intentar cargar el archivo'});
         }, this);
 
         // Comenzamos la carga del archivo
@@ -95,7 +94,7 @@ define([
       }
       else {
         
-        eventHandler.trigger('app:showError', {message: 'El archivo ingresado no es una imagen'});
+        this.trigger('showError', {message: 'El archivo ingresado no es una imagen'});
       }
     }
   });

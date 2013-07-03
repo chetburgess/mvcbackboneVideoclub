@@ -150,6 +150,97 @@ app.delete('/movies/:id', function (req, res) {
 
 
 ///
+// USERS
+//
+// select
+app.get('/users', function (req, res) {
+
+  Users.find({}, function (err, docs) {
+
+    res.send(docs);
+  });
+});
+// insert
+app.post('/users', function (req, res) {
+
+  var doc = new Users(req.body);
+  doc.save(function (err, doc) {
+
+    if (!err) {
+
+      res.send(doc);
+    }
+    else {
+
+      res.send('{"success":false}');
+    }
+  });
+});
+// update
+app.put('/users/:id', function (req, res) {
+
+  Users.findById(req.params.id, function (err, doc) {
+
+    if (!err) {
+
+      for (var i in req.body) {
+
+        if (i !== '_id') {
+          doc[i] = req.body[i];
+        }
+      }
+
+      doc.save(function (err, doc) {
+
+        if (!err) {
+
+          res.send(doc);
+        }
+        else {
+
+          res.status(403).send('{"success":false}');
+        }
+      });
+    }
+    else {
+
+      res.status(404).send('{"success":false}');
+    }
+  });
+});
+// edit
+app.get('/users/:id', function (req, res) {
+
+  Users.findById(req.params.id, function (err, doc) {
+
+    if (!err) {
+
+      res.send(doc);
+    }
+    else {
+
+      res.status(404).send('{"success":false}');
+    }
+  });
+});
+// remove
+app.delete('/users/:id', function (req, res) {
+
+  Users.remove({_id: req.params.id}, function (err) {
+
+    if (!err) {
+
+      res.send('{"success":true}');
+    }
+    else {
+
+      res.status(404).send('{"success":false}');
+    }
+  });
+});
+
+
+///
 // UsersRels
 //
 // select

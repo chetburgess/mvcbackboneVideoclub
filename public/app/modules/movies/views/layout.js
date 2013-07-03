@@ -1,9 +1,8 @@
 define([
     'underscore',
     'bbloader',
-    'app/common/eventHandler',
     'text!app/modules/movies/views/templates/layout.html'
-], function(_, Backbone, eventHandler, moviesLayoutHTML) {
+], function (_, Backbone, moviesLayoutHTML) {
   
   //
   var MoviesCollectionLayout = Backbone.Marionette.Layout.extend({
@@ -39,7 +38,7 @@ define([
         params.page = page;
       }
 
-      eventHandler.trigger('movies:collection:filter', params);
+      this.trigger('filter', params);
     },
 
     //

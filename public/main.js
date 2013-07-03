@@ -19,8 +19,8 @@ require([
 	'app/modules/top/top',
 	'app/modules/movies/movies',
 	'app/modules/menu/menu',
-       'app/modules/usersRels/usersRels',
-       'app/modules/modal/modal'
+    'app/modules/usersRels/usersRels',
+    'app/modules/modal/modal'
 ], function(eventHandler, app, top, movies, menu, usersRels) {
 
 	//

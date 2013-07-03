@@ -1,6 +1,6 @@
 define([
   'app/common/baseModel'
-], function(BaseModel) {
+], function (BaseModel) {
 
   var Movie = BaseModel.extend({
     urlRoot: '/movies',

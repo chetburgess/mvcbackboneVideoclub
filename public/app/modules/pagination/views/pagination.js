@@ -1,9 +1,9 @@
 define([
     'jquery',
     'underscore',
-    'backbone',
+    'bbloader',
     'text!app/modules/pagination/views/templates/pagination.html'
-], function($, _, Backbone, paginationHTML) {
+], function ($, _, Backbone, paginationHTML) {
   
     //
     var PaginatorView = Backbone.Marionette.View.extend({

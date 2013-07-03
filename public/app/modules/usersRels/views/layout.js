@@ -1,16 +1,13 @@
 define([
     'underscore',
     'bbloader',
-    'app/common/eventHandler',
     'text!app/modules/usersRels/views/templates/layout.html'
-], function(_, Backbone, eventHandler, usersRelsLayoutHTML) {
+], function (_, Backbone, usersRelsLayoutHTML) {
   
   //
   var UsersRelsCollectionLayout = Backbone.Marionette.Layout.extend({
 
     tagName: 'div',
-
-    className: 'span12',
 
     template: usersRelsLayoutHTML,
 
@@ -38,7 +35,7 @@ define([
         params.page = page;
       }
 
-      eventHandler.trigger('usersRels:collection:filter', params);
+      this.trigger('filter', params);
     },
 
     //
@@ -57,5 +54,5 @@ define([
     }
   });
 
-    return UsersRelsCollectionLayout;
+  return UsersRelsCollectionLayout;
 });

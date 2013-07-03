@@ -1,8 +1,7 @@
 define([
   'bbloader',
-  'app/common/eventHandler',
   'text!app/modules/usersRels/views/templates/collectionItem.html'
-], function(Backbone, eventHandler, usersRelsCollectionItemHTML) {
+], function (Backbone, usersRelsCollectionItemHTML) {
   
   //
   var UsersRelsCollectionItemView = Backbone.Marionette.ItemView.extend({
@@ -17,7 +16,7 @@ define([
 
     confirmRemove: function() {
 
-      eventHandler.trigger('usersRels:collection:confirmRemove', this);
+      this.trigger('confirmRemove', this);
     }
   });
 

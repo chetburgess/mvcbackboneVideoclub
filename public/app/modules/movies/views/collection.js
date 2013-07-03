@@ -1,10 +1,8 @@
 define([
-  'underscore',
   'bbloader',
-  'app/common/eventHandler',
   'text!app/modules/movies/views/templates/collection.html',
   'app/modules/movies/views/collectionItem'
-], function(_, Backbone, eventHandler, moviesCollectionHTML, MoviesCollectionItemView) {
+], function (Backbone, moviesCollectionHTML, MoviesCollectionItemView) {
   
   //
   var MoviesCollectionView = Backbone.Marionette.CompositeView.extend({
